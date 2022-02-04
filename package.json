@@ -1,0 +1,23 @@
+{
+  "name": "history-kz",
+  "version": "0.0.1",
+  "description": "Kazakhstan history book",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/temirKhan42/history-kz.git"
+  },
+  "keywords": [
+    "kazakhstan",
+    "history"
+  ],
+  "author": "Azhar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/temirKhan42/history-kz/issues"
+  },
+  "homepage": "https://github.com/temirKhan42/history-kz#readme"
+}
