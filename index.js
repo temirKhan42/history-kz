@@ -1,3 +1,1 @@
-const a = 'tes';
-
-console.log(a);
+console.log('Hellow');

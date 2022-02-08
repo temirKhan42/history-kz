@@ -1,5 +1,4 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -12,9 +11,15 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   output: {
-    filename: 'main.[contenthash].js',
-    path: path.resolve(__dirname, 'dist'),
-    assetModuleFilename: './imgs/[name].[contenthash][ext]',
+    path: path.join(__dirname, 'dist', 'public'),
+    publicPath: '/assets/',
+  },
+  devServer: {
+    compress: true,
+    port: 8080,
+    host: '0.0.0.0',
+    static: ['assets'],
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -24,18 +29,9 @@ module.exports = {
         use: 'babel-loader',
       },
       {
-        test: /\.html$/,
-        use: ['html-loader'],
-      },
-      {
         test: /\.s[ac]ss$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '/',
-            },
-          },
+          { loader: MiniCssExtractPlugin.loader },
           'css-loader',
           'sass-loader',
         ],
@@ -47,8 +43,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './public/index.html' }),
-    new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
+    new MiniCssExtractPlugin(),
     new CleanWebpackPlugin(),
   ],
 };
