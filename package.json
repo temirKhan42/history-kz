@@ -1,10 +1,13 @@
 {
   "name": "history-kz",
   "version": "0.0.1",
+  "type": "module",
   "description": "Kazakhstan history book",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "rm -rf dist",
+    "build": "NODE_ENV=production npx webpack --mode production",
+    "start": "node bin/book.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +46,7 @@
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.5.3",
     "node-sass": "^7.0.1",
+    "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "prettier-eslint": "^13.0.0",
     "sass-loader": "^12.4.0",
@@ -54,8 +58,17 @@
   },
   "dependencies": {
     "clean-webpack-plugin": "^4.0.0",
+    "fastify": "^3.27.1",
+    "fastify-jwt": "^4.1.3",
+    "fastify-socket.io": "^3.0.0",
+    "fastify-static": "^4.5.0",
+    "http-errors": "^2.0.0",
+    "lodash": "^4.17.21",
+    "point-of-view": "^5.1.0",
+    "pug": "^3.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^6.2.1"
+    "react-router-dom": "^6.2.1",
+    "socket.io": "^4.4.1"
   }
 }
