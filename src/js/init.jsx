@@ -1,13 +1,13 @@
-import { render } from "react-dom";
-import React from "react";
+import { render } from 'react-dom';
+import React from 'react';
 import {
   BrowserRouter,
   Routes,
-  Route 
-} from "react-router-dom";
+  Route,
+} from 'react-router-dom';
 
 import '../styles/index.scss';
-import App from "./App.jsx";
+import App from './App.jsx';
 import Signin from './routes/Signin.jsx';
 import Login from './routes/Login.jsx';
 import Home from './routes/Home.jsx';
@@ -16,7 +16,7 @@ import Test from './routes/Test.jsx';
 import Progress from './routes/Progress.jsx';
 
 export default () => {
-  const rootElement = document.getElementById("root");
+  const rootElement = document.getElementById('root');
   render(
     <BrowserRouter>
       <Routes>
@@ -30,6 +30,6 @@ export default () => {
         </Route>
       </Routes>
     </BrowserRouter>,
-    rootElement
+    rootElement,
   );
 };
