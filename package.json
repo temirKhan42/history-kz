@@ -29,6 +29,7 @@
     "@babel/eslint-parser": "^7.17.0",
     "@babel/node": "^7.16.8",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "babel-loader": "^8.2.3",
@@ -57,6 +58,8 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.17.2",
+    "axios": "^0.26.0",
     "clean-webpack-plugin": "^4.0.0",
     "fastify": "^3.27.1",
     "fastify-jwt": "^4.1.3",
