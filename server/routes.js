@@ -16,7 +16,7 @@ const buildState = (defaultState) => {
     messages: [],
     currentChannelId: generalChannelId,
     users: [
-      { id: 1, username: 'admin', password: 'admin' },
+      { id: 1, email: 'admin@admin', password: 'admin' },
     ],
   };
 
@@ -85,9 +85,9 @@ export default (app, defaultState = {}) => {
   });
 
   app.post('/api/v1/login', async (req, reply) => {
-    const username = _.get(req, 'body.username');
+    const email = _.get(req, 'body.email');
     const password = _.get(req, 'body.password');
-    const user = state.users.find((u) => u.username === username);
+    const user = state.users.find((u) => u.email === email);
 
     if (!user || user.password !== password) {
       reply.send(new Unauthorized());
@@ -95,7 +95,7 @@ export default (app, defaultState = {}) => {
     }
 
     const token = app.jwt.sign({ userId: user.id });
-    reply.send({ token, username });
+    reply.send({ token, email });
   });
 
   app.post('/api/v1/signup', async (req, reply) => {
