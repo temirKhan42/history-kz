@@ -1,40 +1,51 @@
-import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from 'react-router-dom';
+
+import AuthProvider from './components/AuthProvider';
+import Header from './components/Header.jsx';
+import RequireAuth from './components/RequireAuth';
+import Signin from './components/Signin.jsx';
+import Login from './components/Login.jsx';
+import Home from './components/Home.jsx';
+import Settings from './components/Settings.jsx';
+import Test from './components/Test.jsx';
+import Progress from './components/Progress.jsx';
 
 export default function App() {
+  const protectedPages = ['home', 'test', 'progress', 'settings'];
+  const [home, test, progress, settings] = protectedPages;
+
+  const getElement = (path) => {
+    const currentPage = path === home ? <Home /> : 
+      path === test ? <Test /> :
+      path === progress ? <Progress /> :
+      path === settings ? <Settings /> : null;
+  
+    return (
+      <RequireAuth>
+        {currentPage}
+      </RequireAuth>
+    );
+  }
+
   return (
-    <div>
-      <header>
-        <div>Logo</div>
-        <button type="button">Button</button>
-        <nav>
-          <Link to="/login">Login</Link>
-          {' '}
-          |
-          {' '}
-          <Link to="/signin">Signin</Link>
-          {' '}
-          |
-          {' '}
-          <Link to="/home">Home</Link>
-          {' '}
-          |
-          {' '}
-          <Link to="/settings">Settings</Link>
-          {' '}
-          |
-          {' '}
-          <Link to="/progress">Progress</Link>
-          {' '}
-          |
-          {' '}
-          <Link to="/test">Test</Link>
-          {' '}
-          |
-          {' '}
-        </nav>
-      </header>
-      <Outlet />
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Header />}>
+            <Route path="login" element={<Login />} />
+            <Route path="signin" element={<Signin />} />
+            <Route path={home} element={getElement(home)} />
+            <Route path={settings}element={getElement(settings)} />
+            <Route path={test} element={getElement(test)} />
+            <Route path={progress} element={getElement(progress)} />
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
