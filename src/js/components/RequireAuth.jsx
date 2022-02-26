@@ -1,14 +1,14 @@
 import React from 'react';
-import useAuth from '../hooks/index.js';
 import { useLocation, Navigate } from 'react-router-dom';
+import useAuth from '../hooks/index.js';
 
 export default function RequireAuth({ children }) {
-  let auth = useAuth();
-  let location = useLocation();
+  const auth = useAuth();
+  const location = useLocation();
 
-  if (!auth.isAuthenticated()) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  return children;
+  return auth.isAuthenticated()
+    ? children
+    : <Navigate to="/login" state={{ from: location }} replace />;
 }
+
+RequireAuth.propTypes = React.Node;

@@ -28,8 +28,13 @@ parserOptions:
 
 rules:
   no-console: 0
+  no-nested-ternary: 0
   import/extensions: 0
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
   functional/no-expression-statement: 0
   functional/functional-parameters: 0
   functional/immutable-data: 0
+  functional/no-try-statement: 0
+  jsx-a11y/label-has-associated-control: [ 2, {
+      labelComponents: ["CustomLabel"]
+    }]

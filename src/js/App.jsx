@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter,
   Routes,
@@ -20,17 +20,17 @@ export default function App() {
   const [home, test, progress, settings] = protectedPages;
 
   const getElement = (path) => {
-    const currentPage = path === home ? <Home /> : 
-      path === test ? <Test /> :
-      path === progress ? <Progress /> :
-      path === settings ? <Settings /> : null;
-  
+    const currentPage = path === home ? <Home />
+      : path === test ? <Test />
+        : path === progress ? <Progress />
+          : path === settings ? <Settings /> : null;
+
     return (
       <RequireAuth>
         {currentPage}
       </RequireAuth>
     );
-  }
+  };
 
   return (
     <BrowserRouter>
@@ -40,7 +40,7 @@ export default function App() {
             <Route path="login" element={<Login />} />
             <Route path="signin" element={<Signin />} />
             <Route path={home} element={getElement(home)} />
-            <Route path={settings}element={getElement(settings)} />
+            <Route path={settings} element={getElement(settings)} />
             <Route path={test} element={getElement(test)} />
             <Route path={progress} element={getElement(progress)} />
           </Route>

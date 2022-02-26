@@ -14,12 +14,12 @@ const getData = async (option) => {
   return data;
 };
 
-const LoginForm = () => {
+function LoginForm() {
   const navigate = useNavigate();
   const location = useLocation();
   const auth = useAuth();
 
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || '/';
 
   const formik = useFormik({
     initialValues: {
@@ -32,7 +32,7 @@ const LoginForm = () => {
         localStorage.setItem('userId', JSON.stringify(data));
         auth.signin(() => {
           navigate(from, { replace: true });
-        })
+        });
       } catch (err) {
         console.log(err);
       }
@@ -63,7 +63,7 @@ const LoginForm = () => {
       <button type="submit">Submit</button>
     </form>
   );
-};
+}
 
 export default function Home() {
   return (

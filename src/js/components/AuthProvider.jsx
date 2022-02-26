@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import AuthContext from '../context/index.jsx';
 
 export default function AuthProvider({ children }) {
@@ -16,11 +16,16 @@ export default function AuthProvider({ children }) {
     callback();
   };
 
-  const isAuthenticated = () => {
-    return user !== null;
-  }
+  const isAuthenticated = () => user !== null;
 
-  const value = { user, signin, signout, isAuthenticated };
+  const getValue = () => ({
+    user,
+    isAuthenticated,
+    signin,
+    signout,
+  });
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={getValue()}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = React.Node;
