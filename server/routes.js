@@ -94,27 +94,29 @@ export default (app, defaultState = {}) => {
       return;
     }
 
+    const username = user.username;
     const token = app.jwt.sign({ userId: user.id });
-    reply.send({ token, email });
+    reply.send({ token, username, email });
   });
 
   app.post('/api/v1/signup', async (req, reply) => {
+    const email = _.get(req, 'body.email');
     const username = _.get(req, 'body.username');
     const password = _.get(req, 'body.password');
-    const user = state.users.find((u) => u.username === username);
+    const user = state.users.find((u) => u.email === email);
 
     if (user) {
       reply.send(new Conflict());
       return;
     }
 
-    const newUser = { id: getNextId(), username, password };
+    const newUser = { id: getNextId(), email, username, password };
     const token = app.jwt.sign({ userId: newUser.id });
     state.users.push(newUser);
     reply
       .code(201)
       .header('Content-Type', 'application/json; charset=utf-8')
-      .send({ token, username });
+      .send({ token, username, email });
   });
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {
