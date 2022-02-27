@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import {
   useNavigate,
   useLocation,
+  Link,
 } from 'react-router-dom';
 import axios from 'axios';
 
@@ -31,7 +32,7 @@ function LoginForm() {
         const data = await getData(values);
         localStorage.setItem('userId', JSON.stringify(data));
         auth.signin(() => {
-          navigate(from, { replace: true });
+          navigate('/home');
         });
       } catch (err) {
         console.log(err);
@@ -40,35 +41,39 @@ function LoginForm() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <label htmlFor="email">Email Address</label>
-      <input
-        id="email"
-        name="email"
-        type="email"
-        required
-        onChange={formik.handleChange}
-        value={formik.values.email}
-      />
+    <div>
+      <h3>Войти</h3>
+      <form onSubmit={formik.handleSubmit}>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          onChange={formik.handleChange}
+          value={formik.values.email}
+        />
 
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        required
-        onChange={formik.handleChange}
-        value={formik.values.password}
-      />
-      <button type="submit">Submit</button>
-    </form>
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          onChange={formik.handleChange}
+          value={formik.values.password}
+        />
+        <button type="submit">Войти</button>
+      </form>
+    </div>
   );
 }
 
 export default function Home() {
   return (
-    <main style={{ padding: '1rem 0' }}>
+    <main>
       {LoginForm()}
+      <Link to="/signin">Регистрация</Link>
     </main>
   );
 }
