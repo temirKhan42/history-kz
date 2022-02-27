@@ -2,7 +2,6 @@ import React from 'react';
 import { useFormik } from 'formik';
 import {
   useNavigate,
-  useLocation,
   Link,
 } from 'react-router-dom';
 import axios from 'axios';
@@ -14,11 +13,10 @@ import routes from '../routes/index.js';
 const getData = async (values) => {
   const { data } = await axios.post(routes.signup(), values);
   return data;
-}
+};
 
-function SettingForm () {
+function SettingForm() {
   const navigate = useNavigate();
-  const location = useLocation();
   const auth = useAuth();
 
   const schema = yup.object().shape({
@@ -35,7 +33,7 @@ function SettingForm () {
       .test(
         'is-match',
         'passwords doesn\'t mutches',
-        (val, { parent }) => (val === parent.password)
+        (val, { parent }) => (val === parent.password),
       ),
   });
 

@@ -2,7 +2,6 @@ import React from 'react';
 import { useFormik } from 'formik';
 import {
   useNavigate,
-  useLocation,
   Link,
 } from 'react-router-dom';
 import axios from 'axios';
@@ -17,10 +16,7 @@ const getData = async (option) => {
 
 function LoginForm() {
   const navigate = useNavigate();
-  const location = useLocation();
   const auth = useAuth();
-
-  const from = location.state?.from?.pathname || '/';
 
   const formik = useFormik({
     initialValues: {
