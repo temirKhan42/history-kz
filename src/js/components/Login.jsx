@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
+import Footer from './Footer.jsx';
 
 const getData = async (option) => {
   const { data } = await axios.post(routes.login(), option);
@@ -67,9 +68,12 @@ function LoginForm() {
 
 export default function Home() {
   return (
-    <main>
-      {LoginForm()}
-      <Link to="/signin">Регистрация</Link>
-    </main>
+    <>
+      <main>
+        {LoginForm()}
+        <Link to="/signin">Регистрация</Link>
+      </main>
+      <Footer />
+    </>
   );
 }

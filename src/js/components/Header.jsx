@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
-export default function Header() {
+export default function Header() {  
+  const currentPath = window.location.pathname;
+
   return (
     <div>
       <header>
         <div>Logo</div>
-        <button type="button">Button</button>
+        {
+          currentPath === '/login' || currentPath === '/signin' ?  
+            null :
+            (<button type="button">Button</button>)
+        }
         <nav>
           <Link to="/login">Login</Link>
           {' '}

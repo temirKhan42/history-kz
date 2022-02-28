@@ -9,6 +9,7 @@ import * as yup from 'yup';
 
 import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
+import Footer from './Footer.jsx';
 
 const getData = async (values) => {
   const { data } = await axios.post(routes.signup(), values);
@@ -125,9 +126,12 @@ function SettingForm() {
 
 export default function Settings() {
   return (
-    <main>
-      {SettingForm()}
-      <Link to="/login">Уже зарегистрирован</Link>
-    </main>
+    <>
+      <main>
+        {SettingForm()}
+        <Link to="/login">Уже зарегистрирован</Link>
+      </main>
+      <Footer />
+    </>
   );
 }
