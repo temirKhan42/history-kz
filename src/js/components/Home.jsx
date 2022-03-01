@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   useNavigate,
 } from 'react-router-dom';
 
+import { useDispatch } from 'react-redux';
+import { setCurrentPath } from '../slices/pathSlice.js';
 import useAuth from '../hooks/index.js';
 
-export default function Login() {
+export default function Home() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCurrentPath(window.location.pathname));
+  }, []);
+
   const navigate = useNavigate();
   const auth = useAuth();
 

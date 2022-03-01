@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Header() {  
-  const currentPath = window.location.pathname;
+  const { currentPath } = useSelector((state) => state.pathReducer);
 
   return (
     <div>

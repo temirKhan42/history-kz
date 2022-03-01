@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import {
   useNavigate,
   Link,
 } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setCurrentPath } from '../slices/pathSlice.js';
 
 import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
@@ -67,6 +69,11 @@ function LoginForm() {
 }
 
 export default function Home() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCurrentPath(window.location.pathname));
+  }, []);
+
   return (
     <>
       <main>

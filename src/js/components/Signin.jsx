@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import {
   useNavigate,
@@ -7,6 +7,8 @@ import {
 import axios from 'axios';
 import * as yup from 'yup';
 
+import { useDispatch } from 'react-redux';
+import { setCurrentPath } from '../slices/pathSlice.js';
 import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
 import Footer from './Footer.jsx';
@@ -125,6 +127,12 @@ function SettingForm() {
 }
 
 export default function Settings() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCurrentPath(window.location.pathname));
+  }, []);
+
+
   return (
     <>
       <main>
