@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  currentPath: '',
+  currentPath: '/',
 };
 
 export const pathSlice = createSlice({

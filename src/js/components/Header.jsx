@@ -1,19 +1,20 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import useAuth from '../hooks/index.js';
 
 export default function Header() {  
-  const { currentPath } = useSelector((state) => state.pathReducer);
+  const auth = useAuth();
 
   return (
     <div>
       <header>
         <div>Logo</div>
-        {
-          currentPath === '/login' || currentPath === '/signin' ?  
-            null :
-            (<button type="button">Button</button>)
-        }
+          {
+            auth?.user?.username ?
+              (<button type="button">
+                {auth?.user?.username}
+              </button>) : null
+          }
         <nav>
           <Link to="/login">Login</Link>
           {' '}
