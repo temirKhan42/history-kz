@@ -56,7 +56,7 @@ function SettingForm() {
         localStorage.setItem('userId', JSON.stringify(data));
         console.log(data);
         auth.signin(() => {
-          navigate('/home');
+          navigate('/app/home');
         });
       } catch (err) {
         console.log(err);
@@ -137,7 +137,7 @@ export default function Settings() {
     <>
       <main>
         {SettingForm()}
-        <Link to="/login">Уже зарегистрирован</Link>
+        <Link to="/app/login">Уже зарегистрирован</Link>
       </main>
       <Footer />
     </>

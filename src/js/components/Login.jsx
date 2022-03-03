@@ -31,7 +31,7 @@ function LoginForm() {
         const data = await getData(values);
         localStorage.setItem('userId', JSON.stringify(data));
         auth.signin(() => {
-          navigate('/home');
+          navigate('/app/home');
         });
       } catch (err) {
         console.log(err);
@@ -78,7 +78,7 @@ export default function Home() {
     <>
       <main>
         {LoginForm()}
-        <Link to="/signin">Регистрация</Link>
+        <Link to="/app/signin">Регистрация</Link>
       </main>
       <Footer />
     </>
