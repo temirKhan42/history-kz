@@ -1,30 +1,55 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import _ from 'lodash';
+import axios from 'axios';
+import { BOOK_PARTS, BOOK_PART_DICT } from '../../data/index.js';
 
-const BOOK_PART_DICT = {
-  part1: ['Глава 1. Казахстан в эпоху камня', 'Глава 2. Казахстан в эпоху бронзы' , 'Глава 3. Кочевое скотоводство - производящее хозяйство', 'Глава 4. Саки', 'Глава 5. Сакская археологическая культура и сарматы', 'Глава 6. Ранние государства на территории Казахстана', 'Уйсуны', 'Кангюи', 'Гунны'],
-  part2: ['Глава 1. Раннесредневековые государства (VI-XII вв.)', 'Тюркский каганат', 'Западнотюркский каганат', 'Восточнотюркский каганат', 'Тюргешский каганат', 'Карлукский каганат', 'Огузское государство', 'Кимакский каганат', 'Глава 2. Оседлая и полукочевая культура в VI-IX веках', 'Глава 3. Великий Шелковый путь', 'Глава 4. Государства в период расцвета средневековья (X-XIII вв.)', 'Государство Караханидов', 'Найманы', 'Жалаиры', 'Кереи (кереиты)', 'Каракитаи', 'Кыпчакское ханство', 'Глава 5. Культура Казахстана во второй половине IX - начале XIII веков', 'Глава 6. Монгольские завоевания. Золотая орда. Белая орда', 'Завоевание монголами территорий Казахстана', 'Золотая орда', 'Белая орда', 'Глава 7. Казахстан в XIII - первой половине XV вв', 'Могулистан', 'Государство - административное устройство', 'Глава 8. Экономическое и культурное положение Казахстана в XIV-XV вв', 'Глава 9. Сложение казахской народности', 'Глава 10. Образование единого Казахского ханства', 'Глава 11. Укрепление казахского ханства в XVI-XVII веках'],
-};
+const getNextId = () => Number(_.uniqueId());
 
-const BOOK_PARTS = ['Часть I. История древнего Казахстана', 'Часть II. История средневекового Казахстана'];
+// const getParsingText = (text) => {
+//   return text.split('</p>')
+//     .map((paragraph) => <p>{paragraph.slice(3)}</p>)
+// };
 
-const FIRST_CHAPTER_NAME = BOOK_PART_DICT.part1[0];
+// const TEXT_DICT = {
+//   'chapter_1': 'chapter1 text',
+//   'chapter_2': 'chapter2 text',
+//   'chapter_3': 'chapter3 text',
+//   'chapter_4': 'chapter4 text',
+// };
+
+// const setTexts = (textDict, chapters) => (Object.entries(textDict)
+//   .map(([chapter_i, text]) => {
+//     const { id: chapterId } = chapters
+//       .find(({ chapterNum }) => chapterNum === parseInt(chapter_i.split('_')[1]));
+
+//     return {
+//       chapterId,
+//       text,
+//     };
+//   })
+// );
+
+// const texts = setTexts(TEXT_DICT, chapters);
 
 const setBookParts = (bookParts) => (bookParts.map((partName, index) => ({
-  id: _.uniqueId(),
+  id: getNextId(),
   partName,
-  partNum: `part${index + 1}`,
+  partNum: index + 1,
 })));
 
 const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
-  .reduce((acc, [part, chapters], ) => {
-    const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === part);
-
-    const partChapters = chapters.map((chapterName) => ({
-      id: _.uniqueId(),
-      chapterName,
-      partId,
-    }));
+  .reduce((acc, [part, chapters]) => {
+    const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === parseInt(part));
+    
+    const partChapters = chapters.map((chapterName, index) => {
+      const chapterNum = acc.length + index + 1;
+      return {
+        id: getNextId(),
+        chapterName,
+        partId,
+        chapterNum,
+      };
+    });
 
     return [...acc, ...partChapters];
   }, [])
@@ -32,15 +57,28 @@ const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
 
 const bookParts = setBookParts(BOOK_PARTS);
 const chapters = setChapters(BOOK_PART_DICT, bookParts);
-const [{ id: firstChapterId }] = chapters.filter(({ chapterName }) => chapterName === FIRST_CHAPTER_NAME);
+
+const getData = async (chapterNum) => {
+  const data = await axios.post('/api/v1/text', { chapterNum });
+  return data;
+};
+
+export const fetchData = createAsyncThunk(
+  'data/fetchData',
+  async (chapterNum, thunkAPI) => {
+    const response = await getData(chapterNum);
+    return response.data;
+  }
+)
+
+const { id: firstChapterId, chapterName: firstChapterName } = chapters[0];
 
 const initialState = {
-  summary: {
-    bookParts,
-    chapters,
-    currentChapterId: firstChapterId,
-    currentChapterName: FIRST_CHAPTER_NAME,
-  },
+  bookParts,
+  chapters,
+  currentChapterId: firstChapterId,
+  currentChapterName: firstChapterName,
+  currentText: '',
 };
 
 export const bookSlice = createSlice({
@@ -49,10 +87,18 @@ export const bookSlice = createSlice({
   reducers: {
     setCurrentChapter: (state, action) => {
       const newId = action.payload;
-      state.summary.currentChapterId = newId;
-      const [{ chapterName }] = state.summary.chapters.filter(({ id }) => id === newId);
-      state.summary.currentChapterName = chapterName;
+      state.currentChapterId = newId;
+      const [{ chapterName }] = state.chapters.filter(({ id }) => id === newId);
+      state.currentChapterName = chapterName;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchData.fulfilled, (state, action) => {
+      return {
+        ...state,
+        currentText: action.payload.file === '' ? null : action.payload.file,
+      }
+    })
   }
 });
 
