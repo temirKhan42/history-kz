@@ -36,6 +36,14 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <p>There's nothing here!</p>
+              </main>
+            }
+          />
           <Route path="app" element={<Header />}>
             <Route path="login" element={<Login />} />
             <Route path="signin" element={<Signin />} />
