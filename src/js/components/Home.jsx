@@ -1,65 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/pathSlice.js';
-import { setCurrentChapter } from '../slices/bookSlice.js';
 import { Link } from 'react-router-dom';
+import SummaryList from './SummaryList.jsx';
+import { fetchData } from '../slices/bookSlice.js';
 
-const getSummaryList = () => {
-  const dispatch = useDispatch();
-  const { chapters, currentChapterId, bookParts } = useSelector((state) => state.book.summary);
-
-  const [{ partId }] = chapters.filter(({ id }) => id === currentChapterId);
-
-  const [currentPart, setCurrentPart] = useState(partId);
-
-  const handleShowPart = (id) => (e) => {
-    e.preventDefault();
-    setCurrentPart(id);
-  };
-
-  const handleShowChapter = (id) => (e) => {
-    e.preventDefault();
-    dispatch(setCurrentChapter(id));
-  };
-
-  return bookParts.map(({ partName, id }) => (
-    <li key={`${id}${partName}`}>
-      <a href="#" onClick={handleShowPart(id)}>{partName}</a>
-      {currentPart === id ? (<ul>
-        {
-          chapters
-            .filter(({ partId }) => partId === currentPart)
-            .map(({ chapterName, id: chapterId }) => (
-              <li key={`${id}${chapterId}`}>
-                <a href='#' onClick={handleShowChapter(chapterId)}>{chapterName}</a>
-              </li>
-            ))
-        }
-      </ul>) : null}
-    </li>
-  ));
+const getParsingText = (text) => {
+  return text.split('\n')
+    .map((paragraph, i) => <p key={i}>{paragraph.slice(3, -4)}</p>)
 };
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { currentChapterName } = useSelector((state) => state.book.summary);
-  console.log(currentChapterName)
+  const { currentChapterName, currentText } = useSelector((state) => state.book);
+  
+  if (currentText === '') {
+    const INITIAL_CHAPTER_NUM = '1';
+    dispatch(fetchData(INITIAL_CHAPTER_NUM));
+  }
+
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
   }, []);
 
+  const HOME_SUMMARY = 'HOME_SUMMARY';
+
   return (
     <main style={{ padding: '1rem 0' }}>
-      <section>
-        <h4>Содержание</h4>
-        <ul>
-          {getSummaryList()}
-        </ul>
-      </section>
+      <SummaryList summaryFor={HOME_SUMMARY}/>
       <section>
         <h3>{currentChapterName}</h3>
         <article>
-
+          {currentText === null ? null : getParsingText(currentText)}
         </article>
       </section>
       <Link to="/app/test">Test</Link>
