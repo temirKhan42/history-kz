@@ -2,34 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import axios from 'axios';
 import { BOOK_PARTS, BOOK_PART_DICT } from '../../data/index.js';
+import routes from '../routes/index.js';
 
 const getNextId = () => Number(_.uniqueId());
-
-// const getParsingText = (text) => {
-//   return text.split('</p>')
-//     .map((paragraph) => <p>{paragraph.slice(3)}</p>)
-// };
-
-// const TEXT_DICT = {
-//   'chapter_1': 'chapter1 text',
-//   'chapter_2': 'chapter2 text',
-//   'chapter_3': 'chapter3 text',
-//   'chapter_4': 'chapter4 text',
-// };
-
-// const setTexts = (textDict, chapters) => (Object.entries(textDict)
-//   .map(([chapter_i, text]) => {
-//     const { id: chapterId } = chapters
-//       .find(({ chapterNum }) => chapterNum === parseInt(chapter_i.split('_')[1]));
-
-//     return {
-//       chapterId,
-//       text,
-//     };
-//   })
-// );
-
-// const texts = setTexts(TEXT_DICT, chapters);
 
 const setBookParts = (bookParts) => (bookParts.map((partName, index) => ({
   id: getNextId(),
@@ -59,7 +34,7 @@ const bookParts = setBookParts(BOOK_PARTS);
 const chapters = setChapters(BOOK_PART_DICT, bookParts);
 
 const getData = async (chapterNum) => {
-  const data = await axios.post('/api/v1/text', { chapterNum });
+  const data = await axios.post(routes.getText(), { chapterNum });
   return data;
 };
 

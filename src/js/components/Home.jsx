@@ -26,7 +26,7 @@ export default function Home() {
   const HOME_SUMMARY = 'HOME_SUMMARY';
 
   return (
-    <main style={{ padding: '1rem 0' }}>
+    <main>
       <SummaryList summaryFor={HOME_SUMMARY}/>
       <section>
         <h3>{currentChapterName}</h3>

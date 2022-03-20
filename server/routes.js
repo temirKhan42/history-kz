@@ -120,6 +120,61 @@ export default (app, defaultState = {}) => {
       .send({ token, username, email });
   });
 
+  app.post('/api/v1/changeName', async (req, reply) => {
+    const username = _.get(req, 'body.username');
+    const email = _.get(req, 'body.email');
+    const [user] = state.users.filter((u) => u.email === email)
+      .map((u) => ({ ...u, username }));
+
+    state.users = state.users.filter((u) => u.id !== user.id);
+    state.users.push(user);
+    reply
+      .code(201)
+      .header('Content-Type', 'application/json; charset=utf-8')
+      .send(user);
+  });
+
+  app.post('/api/v1/changePassword', async (req, reply) => {
+    const oldPassword = _.get(req, 'body.password');
+    const email = _.get(req, 'body.email');
+    const newPassword = _.get(req, 'body.newPassword');
+    const user = state.users.find((u) => u.email === email)
+
+    if (user.password !== oldPassword) {
+      reply.send(new Unauthorized());
+      return;
+    }
+
+    const modUser = { ...user, password: newPassword };
+    state.users = state.users.filter((u) => u.id !== modUser.id);
+    state.users.push(modUser);
+    reply
+      .code(201)
+      .header('Content-Type', 'application/json; charset=utf-8')
+      .send({ token: modUser.token, email: modUser.email, username: modUser.username });
+  });
+
+  app.post('/api/v1/changeEmail', async (req, reply) => {
+    const newEmail = _.get(req, 'body.newEmail');
+    const oldEmail = _.get(req, 'body.oldEmail');
+    const user = state.users.find((u) => u.email === newEmail);
+
+    if (user) {
+      reply.send(new Conflict());
+      return;
+    }
+
+    const [modUser] = state.users.filter((u) => u.email === oldEmail)
+      .map((u) => ({ ...u, email: newEmail }));
+
+    state.users = state.users.filter((u) => u.id !== modUser.id);
+    state.users.push(modUser);
+    reply
+      .code(201)
+      .header('Content-Type', 'application/json; charset=utf-8')
+      .send(modUser);
+  });
+
   app.post('/api/v1/text', async (req, reply) => {
     const chapterNum = _.get(req, 'body.chapterNum');
     const file = await readfile(chapterNum);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import {
   useNavigate,
@@ -20,13 +20,15 @@ const getData = async (option) => {
 function LoginForm() {
   const navigate = useNavigate();
   const auth = useAuth();
+  const [isRequestSuccess, setIsRequestSuccess] = useState(true);
+  const [isUnauthorizedErr, setIsUnauthorizedErr] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       try {
         const data = await getData(values);
         localStorage.setItem('userId', JSON.stringify(data));
@@ -34,7 +36,12 @@ function LoginForm() {
           navigate('/app/home');
         });
       } catch (err) {
-        console.log(err);
+        resetForm({ values: '' });
+        if (err.response.status === 401) {
+          setIsUnauthorizedErr(true);
+        } else {
+          setIsRequestSuccess(false);
+        }
       }
     },
   });
@@ -51,6 +58,7 @@ function LoginForm() {
           required
           onChange={formik.handleChange}
           value={formik.values.email}
+          disabled={formik.isSubmitting}
         />
 
         <label htmlFor="password">Password</label>
@@ -61,8 +69,16 @@ function LoginForm() {
           required
           onChange={formik.handleChange}
           value={formik.values.password}
+          disabled={formik.isSubmitting}
         />
-        <button type="submit">Войти</button>
+        {isUnauthorizedErr ? (
+          <div>Не верный логин или пороль</div>
+        ) : null}
+        {isRequestSuccess ? null : (
+          <div>Неизвестная ошибка, проверьте интернет соединение.</div>
+        )}
+
+        <button type="submit" disabled={formik.isSubmitting}>Войти</button>
       </form>
     </div>
   );
