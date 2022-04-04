@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrentPath } from '../slices/pathSlice.js';
+import { setCurrentPath } from '../slices/userSlice.js';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import routes from '../routes/index.js';

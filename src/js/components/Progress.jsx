@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrentPath } from '../slices/pathSlice.js';
+import { setCurrentPath } from '../slices/userSlice.js';
 import SummaryList from './SummaryList.jsx';
 
 export default function Progress() {

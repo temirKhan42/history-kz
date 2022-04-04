@@ -8,7 +8,7 @@ import axios from 'axios';
 import * as yup from 'yup';
 
 import { useDispatch } from 'react-redux';
-import { setCurrentPath } from '../slices/pathSlice.js';
+import { setCurrentPath } from '../slices/userSlice.js';
 import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
 import Footer from './Footer.jsx';
@@ -54,7 +54,6 @@ function SettingForm() {
       try {
         const data = await getData(values);
         localStorage.setItem('userId', JSON.stringify(data));
-        console.log(data);
         auth.signin(() => {
           navigate('/app/home');
         });

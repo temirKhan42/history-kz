@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { setCurrentPath } from '../slices/pathSlice.js';
+import { setCurrentPath } from '../slices/userSlice.js';
 
 import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';

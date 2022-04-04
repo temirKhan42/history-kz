@@ -1,0 +1,47 @@
+question1 ?
+variantA
+variantB
+variantC
+variantD
+1
+2
+
+question2 ?
+variantA
+variantB
+variantC
+variantD
+1
+2
+
+question3 ?
+variantA
+variantB
+variantC
+variantD
+1
+3
+
+question1 ?
+1variantA
+1variantB
+1variantC
+1variantD
+2
+2
+
+question2 ?
+2variantA
+2variantB
+2variantC
+2variantD
+2
+2
+
+question3 ?
+3variantA
+3variantB
+3variantC
+3variantD
+2
+1

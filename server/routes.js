@@ -9,10 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(__filename);
 
+const getNextId = () => Number(_.uniqueId());
+
 const readfile = async (fileNum) => {
   let filehandle;
   try {
-    const filePath = path.join(__dirname, `../src/data/chapter${fileNum}.html`);
+    const filePath = path.join(__dirname, `data/chapters/${fileNum}.html`);
     filehandle = await fs.open(filePath, 'r');
     const file = await filehandle.readFile('utf-8');
     return file;
@@ -23,22 +25,75 @@ const readfile = async (fileNum) => {
   }
 }
 
+const fetchTests = async () => {
+  let filehandle;
+  try {
+    const filePath = path.join(__dirname, `data/tests/test.txt`);
+    filehandle = await fs.open(filePath, 'r');
+    const file = await filehandle.readFile('utf-8');
+    return file;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await filehandle?.close();
+  }
+}
+
+const getTests = async (testsStr) => {
+  return testsStr.split('\n\n').map((q) => {
+    const questionParts = q.split('\n');
+    const leng = questionParts.length;
+    const rightAnswerNum = parseInt(questionParts[leng - 1]);
+    const chapterNum = parseInt(questionParts[leng - 2]);
+    const question = questionParts[0];
+    const answers = questionParts.slice(1, -2).map((answer, index) => {
+      return {
+        answer,
+        id: index + 1,
+        isCorrect: rightAnswerNum === (index + 1)
+      }
+    });
+
+    return {
+      question,
+      id: getNextId(),
+      chapterNum,
+      chapterId: 0,
+      answers,
+      everAnswered: false,
+      howLastTimeAnswered: '',
+    }
+  })
+}
+
 const { Unauthorized, Conflict } = HttpErrors;
 
-const getNextId = () => Number(_.uniqueId());
+const buildState = async () => {
+  const buildTest = async () => {
+    const testsStr = await fetchTests();
+    const tests = getTests(testsStr);
+    return tests;
+  };
+  
+  const tests = await buildTest();
 
-const buildState = () => {
   const state = {
     users: [
-      { id: 1, email: 'admin@admin', password: 'admin', username: 'admin' },
+      {
+        id: 1, 
+        email: 'admin@admin', 
+        password: 'admin', 
+        username: 'admin',
+        tests,
+      },
     ],
   };
 
   return state;
 };
 
-export default (app, defaultState = {}) => {
-  const state = buildState(defaultState);
+export default async (app, defaultState = {}) => {
+  const state = await buildState(defaultState);
 
   // app.io.on('connect', (socket) => {
   //   console.log({ 'socket.id': socket.id });
@@ -97,7 +152,7 @@ export default (app, defaultState = {}) => {
 
     const username = user.username;
     const token = app.jwt.sign({ userId: user.id });
-    reply.send({ token, username, email });
+    reply.send({ token, username, email, id: user.id });
   });
 
   app.post('/api/v1/signup', async (req, reply) => {
@@ -105,19 +160,21 @@ export default (app, defaultState = {}) => {
     const username = _.get(req, 'body.username');
     const password = _.get(req, 'body.password');
     const user = state.users.find((u) => u.email === email);
+    const testsStr = await fetchTests();
+    const tests = getTests(testsStr);
 
     if (user) {
       reply.send(new Conflict());
       return;
     }
 
-    const newUser = { id: getNextId(), email, username, password };
+    const newUser = { id: getNextId(), email, username, password, tests };
     const token = app.jwt.sign({ userId: newUser.id });
     state.users.push(newUser);
     reply
       .code(201)
       .header('Content-Type', 'application/json; charset=utf-8')
-      .send({ token, username, email });
+      .send({ token, username, email, id: newUser.id });
   });
 
   app.post('/api/v1/changeName', async (req, reply) => {
@@ -180,6 +237,18 @@ export default (app, defaultState = {}) => {
     const file = await readfile(chapterNum);
     reply.send({ file: file ? file : '' });
   });
+
+  app.post('/api/v1/tests', async (req, reply) => {
+    const userId = _.get(req, 'body.userId');
+    const user = state.users.find(({ id }) => id === userId);
+
+    if (!user) {
+      reply.send(new Unauthorized());
+      return;
+    }
+    const tests = user.tests;
+    reply.send({ tests });
+  })
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {
     const user = state.users.find(({ id }) => id === req.user.userId);

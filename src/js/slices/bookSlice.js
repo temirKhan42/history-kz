@@ -38,10 +38,23 @@ const getData = async (chapterNum) => {
   return data;
 };
 
+const getTests = async (userId) => {
+  const data = await axios.post(routes.getTest(), { userId });
+  return data;
+}
+
 export const fetchData = createAsyncThunk(
   'data/fetchData',
   async (chapterNum, thunkAPI) => {
     const response = await getData(chapterNum);
+    return response.data;
+  }
+)
+
+export const fetchTests = createAsyncThunk(
+  'tests/fetchTests',
+  async (userId, thunkAPI) => {
+    const response = await getTests(userId);
     return response.data;
   }
 )
@@ -53,7 +66,10 @@ const initialState = {
   chapters,
   currentChapterId: firstChapterId,
   currentChapterName: firstChapterName,
-  currentText: '',
+  currentText: null,
+  tests: [],
+  chapterTests: [],
+  currentTest: null,
 };
 
 export const bookSlice = createSlice({
@@ -66,18 +82,49 @@ export const bookSlice = createSlice({
       const [{ chapterName }] = state.chapters.filter(({ id }) => id === newId);
       state.currentChapterName = chapterName;
     },
+    setChapterTests: (state, action) => {
+      state.chapterTests = action.payload;
+    },
+    setCurrentTest: (state, action) => {
+      console.log(action);
+      state.currentTest = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchData.fulfilled, (state, action) => {
       return {
         ...state,
-        currentText: action.payload.file === '' ? null : action.payload.file,
+        currentText: action.payload.file === '' ? '' : action.payload.file,
+      }
+    })
+    builder.addCase(fetchTests.fulfilled, (state, action) => {
+      if (action.payload.tests[0]?.chapterId === 0) {
+        const tests = action.payload.tests.map((test) => {
+          const { id } = state.chapters.find(({ chapterNum: num }) => {
+            return (num === test.chapterNum);
+          });
+
+          return {
+            ...test,
+            chapterId: id,
+          };
+        });
+
+        return {
+          ...state,
+          tests,
+        };
+      }
+
+      return {
+        ...state,
+        tests: action.payload.tests,
       }
     })
   }
 });
 
-export const { setCurrentChapter } = bookSlice.actions;
+export const { setCurrentChapter, setChapterTests, setCurrentTest } = bookSlice.actions;
 
 export default bookSlice.reducer;
  

@@ -10,4 +10,5 @@ export default {
   changeName: () => [host, prefix, 'changeName'].join('/'),
   changeEmail: () => [host, prefix, 'changeEmail'].join('/'),
   changePassword: () => [host, prefix, 'changePassword'].join('/'),
+  getTest: () => [host, prefix, 'tests'].join('/'),
 };

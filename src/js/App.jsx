@@ -36,14 +36,6 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>There's nothing here!</p>
-              </main>
-            }
-          />
           <Route path="app" element={<Header />}>
             <Route path="login" element={<Login />} />
             <Route path="signin" element={<Signin />} />
@@ -52,6 +44,14 @@ export default function App() {
             <Route path={test} element={getElement(test)} />
             <Route path={progress} element={getElement(progress)} />
           </Route>
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <p>There's nothing here!</p>
+              </main>
+            }
+          />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

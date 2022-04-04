@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/index.js';
-import { useDispatch } from 'react-redux';
-import { setCurrentPath } from '../slices/pathSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentPath } from '../slices/userSlice.js';
 
 
 export default function Header() {
   const dispatch = useDispatch();
+  const { currentPath, isTesting } = useSelector((state) => state.user);
+
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
   }, []);
@@ -20,6 +22,8 @@ export default function Header() {
     setIsMenuOpened(!isMenuOpened);
   };
 
+  console.log(currentPath);
+
   const handleExitClick = (e) => {
     e.preventDefault();
     setIsMenuOpened(false);
@@ -32,7 +36,7 @@ export default function Header() {
         <nav>
           <div>Logo</div>
           {
-            auth?.user?.username ?
+            auth?.user?.username && !isTesting ?
               (<button type="button" onClick={handleClick}>
                 {auth?.user?.username}
               </button>) : null
