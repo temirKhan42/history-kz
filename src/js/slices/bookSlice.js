@@ -68,8 +68,9 @@ const initialState = {
   currentChapterName: firstChapterName,
   currentText: null,
   tests: [],
-  chapterTests: [],
-  currentTest: null,
+  chapterTests: [],  
+  userAnswers: [],   // [{ testId, answerIds: [] }, ...]
+  currentTestIndex: null,
 };
 
 export const bookSlice = createSlice({
@@ -85,9 +86,22 @@ export const bookSlice = createSlice({
     setChapterTests: (state, action) => {
       state.chapterTests = action.payload;
     },
-    setCurrentTest: (state, action) => {
-      console.log(action);
-      state.currentTest = action.payload;
+    setCurrentTestIndex: (state, action) => {
+      state.currentTestIndex = action.payload;
+    },
+    addUserAnswers: (state, action) => {
+      const userAnswer = action.payload;
+      if (state.userAnswers.some(({ testId }) => testId === userAnswer.testId)) {
+        const answers = state.userAnswers.map(({ testId, answerIds }) => {
+          if (testId === userAnswer.testId) {
+            answerIds.push(userAnswer.answerIds[0]);
+          }
+        })
+
+        state.userAnswers = answers;
+      } else {
+        state.userAnswers.push(action.payload);
+      }
     }
   },
   extraReducers: (builder) => {
@@ -124,7 +138,12 @@ export const bookSlice = createSlice({
   }
 });
 
-export const { setCurrentChapter, setChapterTests, setCurrentTest } = bookSlice.actions;
+export const { 
+  setCurrentChapter, 
+  setChapterTests, 
+  setCurrentTestIndex,
+  addUserAnswers,
+} = bookSlice.actions;
 
 export default bookSlice.reducer;
  

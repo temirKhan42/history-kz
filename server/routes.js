@@ -49,7 +49,7 @@ const getTests = async (testsStr) => {
     const answers = questionParts.slice(1, -2).map((answer, index) => {
       return {
         answer,
-        id: index + 1,
+        id: getNextId(),
         isCorrect: rightAnswerNum === (index + 1)
       }
     });

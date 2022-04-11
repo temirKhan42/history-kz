@@ -2,21 +2,21 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 import { setCurrentPath } from '../slices/userSlice.js';
-import { setCurrentTest } from '../slices/bookSlice.js';
+import { setCurrentTestIndex } from '../slices/bookSlice.js';
 import CurrentTest from './CurrentTest.jsx';
 
 export default function Test() {
   const dispatch = useDispatch();
 
-  const { currentTest } = useSelector((state) => state.book);
+  const { currentTestIndex, chapterTests } = useSelector((state) => state.book);
 
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
   }, []);
 
-  const handleClick = (test) => (e) => {
+  const handleClick = (i) => (e) => {
     console.log(e);
-    dispatch(setCurrentTest(test));
+    dispatch(setCurrentTestIndex(currentTestIndex + i));
   };
 
   return (
@@ -24,15 +24,15 @@ export default function Test() {
       <h2>Test</h2>
       <CurrentTest />
       <button 
-        onClick={handleClick(currentTest.prev)} 
-        disabled={currentTest.prev === null}
+        onClick={handleClick(-1)} 
+        disabled={currentTestIndex - 1 < 0}
       >
         Previous
       </button>
       
       <button 
-        onClick={handleClick(currentTest.next)} 
-        disabled={currentTest.next === null}
+        onClick={handleClick(1)} 
+        disabled={currentTestIndex + 1 >= chapterTests.length}
       >
         Next
       </button>

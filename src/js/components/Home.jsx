@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import { Link } from 'react-router-dom';
-import _, { first } from 'lodash';
+import _ from 'lodash';
 import SummaryList from './SummaryList.jsx';
-import { fetchData, fetchTests, setCurrentTest, setChapterTests } from '../slices/bookSlice.js';
+import { fetchData, fetchTests, setCurrentTestIndex, setChapterTests } from '../slices/bookSlice.js';
 import useAuth from '../hooks/index.js';
 
 const getParsingText = (text) => {
@@ -12,44 +12,6 @@ const getParsingText = (text) => {
     .map((paragraph, i) => (<p key={i}>{paragraph}</p>));
 
   return result;
-};
-
-const getLinkedTests = (chapterTests) => {
-  
-  const lastIdx = chapterTests.length - 1;
-  const firstIdx = 0;
-  
-  const r = (list, current, i) => {
-    if (i === lastIdx) {
-      return current;
-    }
-
-    const crnt = current === null ? {
-      test: list[i],
-      testNumber: i + 1,
-      next: 
-    } : current;
-    
-    return r(list, crnt, i + 1);
-  };
-
-  r(chapterTests, null, firstIdx);
-}
-
-
-const getFirstTest = (chapterTests) => {
-  const [firstTest] = chapterTests.map((test, index, list) => {
-    const prev = index - 1 < 0 ? null : list[index - 1];
-    const next = index + 1 === list.length ? null : list[index + 1];
-    return {
-      prev,
-      next,
-      test,
-      testNumber: index + 1,
-    }
-  });
-
-  return firstTest;
 };
 
 export default function Home() {
@@ -74,10 +36,9 @@ export default function Home() {
 
   const handleTestClick = (e) => {
     const chapterTests = _.shuffle(tests.filter(({ chapterId }) => chapterId === currentChapterId));
-    const firstTest = getFirstTest(chapterTests);
     console.log(chapterTests);
     dispatch(setChapterTests(chapterTests));
-    dispatch(setCurrentTest(firstTest));
+    dispatch(setCurrentTestIndex(0));
     dispatch(setIsTesting());
   };
 
