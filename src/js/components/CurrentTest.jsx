@@ -1,6 +1,6 @@
 import React from 'react';    
 import { useDispatch, useSelector } from 'react-redux';
-import { addUserAnswers } from '../slices/bookSlice.js';
+import { addUserAnswer, removeUserAnswer } from '../slices/bookSlice.js';
 
 const CurrentTest = () => {
   const dispatch = useDispatch();
@@ -12,27 +12,30 @@ const CurrentTest = () => {
   } = useSelector((state) => state.book);
 
   const handleChange = (e) => {
-    console.log(e);
-    const [testId, answerId] = e.target.id.split('-');
-    const answerIds = [answerId]
+    console.dir(e.target);
+    e.preventDefault();
+    const [curTestId, curAnswerId] = e.target.id.split('-');
+    const answerIds = [curAnswerId];
+    console.log(userAnswers);
     const userAnswer = {
-      testId,
+      testId: curTestId,
       answerIds,
     };
 
-    dispatch(addUserAnswers(userAnswer));
+    const isAnswerChecked = userAnswers.some(({ testId, answerIds }) => (
+      testId === curTestId && answerIds.some((id) => id === curAnswerId)
+    ));
+
+    dispatch(isAnswerChecked ? removeUserAnswer(userAnswer) : addUserAnswer(userAnswer));
   }
 
-  const isChecked = (curtTestId, curAnswerId) => (e) => {
-    console.log(e);
-    const result = userAnswers.some(({ testId, answerIds }) => {
-      if (testId === curtTestId && answerIds.some((id) => id === curAnswerId)) {
-        return true;
-      }
-      return false;
-    });
-
-    return result;
+  const isChecked = (curTestId, curAnswerId) => {
+    console.log(userAnswers);
+    const isAnswerChecked = userAnswers.some(({ testId, answerIds }) => (
+      testId === curTestId && answerIds?.some((id) => id === curAnswerId)
+    ));
+    
+    return isAnswerChecked;
   };
 
   const test = chapterTests[currentTestIndex];
@@ -50,9 +53,9 @@ const CurrentTest = () => {
                 <input
                   type="checkbox"
                   onChange={handleChange}
-                  checked={isChecked(test?.id, id)}
+                  checked={!!(isChecked(test?.id, id))}
                   name={`testId:${test?.id}`}
-                  value={id}
+                  value={`${test?.id}-${id}`}
                   id={`${test?.id}-${id}`}
                 />
               </li>

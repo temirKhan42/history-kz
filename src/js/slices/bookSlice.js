@@ -89,8 +89,14 @@ export const bookSlice = createSlice({
     setCurrentTestIndex: (state, action) => {
       state.currentTestIndex = action.payload;
     },
-    addUserAnswers: (state, action) => {
+    addUserAnswer: (state, action) => {
       const userAnswer = action.payload;
+      
+      // state.userAnswers.map(({ testId, answerIds }) => ({
+      //   testId,
+      //   answerIds: testId !== userAnswer.testId ? answerIds : [...answerIds, ...userAnswer.answerIds],
+      // }));
+
       if (state.userAnswers.some(({ testId }) => testId === userAnswer.testId)) {
         const answers = state.userAnswers.map(({ testId, answerIds }) => {
           if (testId === userAnswer.testId) {
@@ -102,6 +108,17 @@ export const bookSlice = createSlice({
       } else {
         state.userAnswers.push(action.payload);
       }
+    },
+    removeUserAnswer: (state, action) => {
+      const userAnswer = action.payload;
+      state.userAnswers = state.userAnswers.map(({ testId, answerIds }) => {
+        const result = {
+          testId,
+          answerIds: testId === userAnswer.testId ? answerIds.filter((id) => id !== userAnswer.answerIds[0]) : answerIds,
+        };
+        console.log(result);
+        return result;
+      })
     }
   },
   extraReducers: (builder) => {
@@ -142,7 +159,8 @@ export const {
   setCurrentChapter, 
   setChapterTests, 
   setCurrentTestIndex,
-  addUserAnswers,
+  addUserAnswer,
+  removeUserAnswer,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

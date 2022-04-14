@@ -60,6 +60,7 @@ const getTests = async (testsStr) => {
       chapterNum,
       chapterId: 0,
       answers,
+      userAnswers: [],
       everAnswered: false,
       howLastTimeAnswered: '',
     }
