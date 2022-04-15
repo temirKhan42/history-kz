@@ -13,18 +13,19 @@ const CurrentTest = () => {
 
   const handleChange = (e) => {
     console.dir(e.target);
-    e.preventDefault();
     const [curTestId, curAnswerId] = e.target.id.split('-');
     const answerIds = [curAnswerId];
-    console.log(userAnswers);
+    
     const userAnswer = {
       testId: curTestId,
       answerIds,
     };
 
     const isAnswerChecked = userAnswers.some(({ testId, answerIds }) => (
-      testId === curTestId && answerIds.some((id) => id === curAnswerId)
+      `${testId}` === `${curTestId}` && answerIds.some((id) => `${id}` === `${curAnswerId}`)
     ));
+
+    console.log(isAnswerChecked);
 
     dispatch(isAnswerChecked ? removeUserAnswer(userAnswer) : addUserAnswer(userAnswer));
   }
@@ -32,7 +33,7 @@ const CurrentTest = () => {
   const isChecked = (curTestId, curAnswerId) => {
     console.log(userAnswers);
     const isAnswerChecked = userAnswers.some(({ testId, answerIds }) => (
-      testId === curTestId && answerIds?.some((id) => id === curAnswerId)
+      `${testId}` === `${curTestId}` && answerIds?.some((id) => `${id}` === `${curAnswerId}`)
     ));
     
     return isAnswerChecked;

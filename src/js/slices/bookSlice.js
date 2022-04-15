@@ -91,22 +91,16 @@ export const bookSlice = createSlice({
     },
     addUserAnswer: (state, action) => {
       const userAnswer = action.payload;
-      
-      // state.userAnswers.map(({ testId, answerIds }) => ({
-      //   testId,
-      //   answerIds: testId !== userAnswer.testId ? answerIds : [...answerIds, ...userAnswer.answerIds],
-      // }));
 
-      if (state.userAnswers.some(({ testId }) => testId === userAnswer.testId)) {
-        const answers = state.userAnswers.map(({ testId, answerIds }) => {
-          if (testId === userAnswer.testId) {
-            answerIds.push(userAnswer.answerIds[0]);
-          }
-        })
+      if (state.userAnswers.some(({ testId }) => `${testId}` === `${userAnswer.testId}`)) {
+        const answers = state.userAnswers.map(({ testId, answerIds }) => ({
+          testId,
+          answerIds: `${testId}` === `${userAnswer.testId}` ? [...answerIds, userAnswer.answerIds[0]] : answerIds,
+        }));
 
         state.userAnswers = answers;
       } else {
-        state.userAnswers.push(action.payload);
+        state.userAnswers = [...state.userAnswers, action.payload];
       }
     },
     removeUserAnswer: (state, action) => {
@@ -114,7 +108,7 @@ export const bookSlice = createSlice({
       state.userAnswers = state.userAnswers.map(({ testId, answerIds }) => {
         const result = {
           testId,
-          answerIds: testId === userAnswer.testId ? answerIds.filter((id) => id !== userAnswer.answerIds[0]) : answerIds,
+          answerIds: `${testId}` === `${userAnswer.testId}` ? answerIds.filter((id) => `${id}` !== `${userAnswer.answerIds[0]}`) : answerIds,
         };
         console.log(result);
         return result;
