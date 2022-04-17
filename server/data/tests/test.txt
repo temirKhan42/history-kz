@@ -45,3 +45,11 @@ question3 ?
 3variantD
 2
 1
+
+2+2 ?
+a) 7
+b) 3
+c) 4
+d) 1
+2
+3

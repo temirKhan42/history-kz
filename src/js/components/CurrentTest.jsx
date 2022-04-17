@@ -5,9 +5,9 @@ import { addUserAnswer, removeUserAnswer } from '../slices/bookSlice.js';
 const CurrentTest = () => {
   const dispatch = useDispatch();
 
-  const { 
-    currentTestIndex, 
-    chapterTests, 
+  const {
+    currentTestIndex,
+    chapterTests,
     userAnswers,
   } = useSelector((state) => state.book);
 

@@ -4,7 +4,12 @@ import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import SummaryList from './SummaryList.jsx';
-import { fetchData, fetchTests, setCurrentTestIndex, setChapterTests } from '../slices/bookSlice.js';
+import { 
+  fetchData, 
+  fetchTests, 
+  setCurrentTestIndex, 
+  setChapterTests,
+} from '../slices/bookSlice.js';
 import useAuth from '../hooks/index.js';
 
 const getParsingText = (text) => {

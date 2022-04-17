@@ -11,4 +11,5 @@ export default {
   changeEmail: () => [host, prefix, 'changeEmail'].join('/'),
   changePassword: () => [host, prefix, 'changePassword'].join('/'),
   getTest: () => [host, prefix, 'tests'].join('/'),
+  postTests: () => [host, prefix, 'testsAddUserAnswers'].join('/'),
 };

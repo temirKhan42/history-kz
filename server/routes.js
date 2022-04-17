@@ -75,7 +75,7 @@ const buildState = async () => {
     const tests = getTests(testsStr);
     return tests;
   };
-  
+
   const tests = await buildTest();
 
   const state = {
@@ -95,51 +95,6 @@ const buildState = async () => {
 
 export default async (app, defaultState = {}) => {
   const state = await buildState(defaultState);
-
-  // app.io.on('connect', (socket) => {
-  //   console.log({ 'socket.id': socket.id });
-
-  //   socket.on('newMessage', (message, acknowledge = _.noop) => {
-  //     const messageWithId = {
-  //       ...message,
-  //       id: getNextId(),
-  //     };
-  //     state.messages.push(messageWithId);
-  //     acknowledge({ status: 'ok' });
-  //     app.io.emit('newMessage', messageWithId);
-  //   });
-
-  //   socket.on('newChannel', (channel, acknowledge = _.noop) => {
-  //     const channelWithId = {
-  //       ...channel,
-  //       removable: true,
-  //       id: getNextId(),
-  //     };
-  //     state.channels.push(channelWithId);
-  //     acknowledge({ status: 'ok', data: channelWithId });
-  //     app.io.emit('newChannel', channelWithId);
-  //   });
-
-  //   socket.on('removeChannel', ({ id }, acknowledge = _.noop) => {
-  //     const channelId = Number(id);
-  //     state.channels = state.channels.filter((c) => c.id !== channelId);
-  //     state.messages = state.messages.filter((m) => m.channelId !== channelId);
-  //     const data = { id: channelId };
-
-  //     acknowledge({ status: 'ok' });
-  //     app.io.emit('removeChannel', data);
-  //   });
-
-  //   socket.on('renameChannel', ({ id, name }, acknowledge = _.noop) => {
-  //     const channelId = Number(id);
-  //     const channel = state.channels.find((c) => c.id === channelId);
-  //     if (!channel) return;
-  //     channel.name = name;
-
-  //     acknowledge({ status: 'ok' });
-  //     app.io.emit('renameChannel', channel);
-  //   });
-  // });
 
   app.post('/api/v1/login', async (req, reply) => {
     const email = _.get(req, 'body.email');
@@ -247,9 +202,59 @@ export default async (app, defaultState = {}) => {
       reply.send(new Unauthorized());
       return;
     }
-    const tests = user.tests;
+
+    const tests = user.tests.map((test) => ({ 
+      ...test, 
+      answers: test.answers.map(({ answer, id }) => ({ answer, id })), 
+    }));
+
     reply.send({ tests });
-  })
+  });
+
+  app.post('/api/v1/testsAddUserAnswers', async (req, reply) => {
+    const userAnswers = _.get(req, 'body.userAnswers');
+    const userId = _.get(req, 'body.userId');
+    const user = state.users.find(({ id }) => id === userId);
+
+    if (!user) {
+      reply.send(new Unauthorized());
+      return;
+    }
+
+    const newTests = user.tests.map((test) => {
+      const rightAnswerIds = test.answers
+        .filter(({ isCorrect }) => isCorrect)
+        .map(({ id }) => `${id}`);
+
+      const userAnswer = userAnswers.find(({ testId }) => `${testId}` === `${test.id}`);
+
+      if (!userAnswer) {
+        return {
+          ...test,
+          answers: test.answers.map(({ answer, id }) => ({ answer, id })),
+        };
+      }
+
+      return { 
+        ...test,
+        answers: test.answers.map(({ answer, id }) => ({ answer, id })),
+        userAnswers: [
+          ...test.userAnswers,
+          {
+            answerIds: userAnswer.answerIds,
+            date: new Date(),
+            wasRight: _.isEqual(_.sortBy(rightAnswerIds), _.sortBy(userAnswer.answerIds)),
+          }
+        ],
+        everAnswered: true,
+      };
+    });
+    
+    state.users = state.users.filter(({ id }) => id !== userId)
+      .push({ ...user, tests: newTests });
+
+    reply.send({ tests: newTests });
+  });
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {
     const user = state.users.find(({ id }) => id === req.user.userId);
