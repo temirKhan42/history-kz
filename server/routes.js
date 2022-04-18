@@ -229,15 +229,11 @@ export default async (app, defaultState = {}) => {
       const userAnswer = userAnswers.find(({ testId }) => `${testId}` === `${test.id}`);
 
       if (!userAnswer) {
-        return {
-          ...test,
-          answers: test.answers.map(({ answer, id }) => ({ answer, id })),
-        };
+        return test;
       }
 
       return { 
         ...test,
-        answers: test.answers.map(({ answer, id }) => ({ answer, id })),
         userAnswers: [
           ...test.userAnswers,
           {
@@ -253,7 +249,10 @@ export default async (app, defaultState = {}) => {
     state.users = state.users.filter(({ id }) => id !== userId)
       .push({ ...user, tests: newTests });
 
-    reply.send({ tests: newTests });
+    reply.send({ tests: newTests.map((test) => ({ 
+      ...test, 
+      answers: test.answers.map(({ answer, id }) => ({ answer, id })), 
+    }))});
   });
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {

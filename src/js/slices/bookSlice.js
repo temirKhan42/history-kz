@@ -116,6 +116,9 @@ export const bookSlice = createSlice({
     },
     resetUserAnswers: (state) => {
       state.userAnswers = [];
+    },
+    refreshTest: (state, action) => {
+      state.tests = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -159,6 +162,7 @@ export const {
   addUserAnswer,
   removeUserAnswer,
   resetUserAnswers,
+  refreshTest,
 } = bookSlice.actions;
 
 export default bookSlice.reducer;

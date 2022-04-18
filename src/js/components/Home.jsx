@@ -22,7 +22,12 @@ const getParsingText = (text) => {
 export default function Home() {
   const dispatch = useDispatch();
   const auth = useAuth();
-  const { currentChapterName, currentText, tests, currentChapterId } = useSelector((state) => state.book);
+  const { 
+    currentChapterName, 
+    currentText, 
+    tests, 
+    currentChapterId 
+  } = useSelector((state) => state.book);
 
   const HOME_SUMMARY = 'HOME_SUMMARY';
 
@@ -38,6 +43,8 @@ export default function Home() {
       dispatch(fetchData(INITIAL_CHAPTER_NUM));
     }
   }, []);
+
+  console.log(tests);
 
   const handleTestClick = (e) => {
     const chapterTests = _.shuffle(tests.filter(({ chapterId }) => chapterId === currentChapterId));
