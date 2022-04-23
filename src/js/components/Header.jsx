@@ -42,7 +42,7 @@ export default function Header() {
               </button>) : null
           }
           {
-            isMenuOpened ? 
+            isMenuOpened && !isTesting ? 
             (
               <ul>
                 <li><Link to="/app/home">Home</Link></li>

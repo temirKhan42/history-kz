@@ -110,7 +110,6 @@ export const bookSlice = createSlice({
           testId,
           answerIds: `${testId}` === `${userAnswer.testId}` ? answerIds.filter((id) => `${id}` !== `${userAnswer.answerIds[0]}`) : answerIds,
         };
-        console.log(result);
         return result;
       })
     },
@@ -118,6 +117,7 @@ export const bookSlice = createSlice({
       state.userAnswers = [];
     },
     refreshTest: (state, action) => {
+      console.log(action.payload);
       state.tests = action.payload;
     }
   },

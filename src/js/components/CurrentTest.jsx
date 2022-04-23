@@ -12,7 +12,6 @@ const CurrentTest = () => {
   } = useSelector((state) => state.book);
 
   const handleChange = (e) => {
-    console.dir(e.target);
     const [curTestId, curAnswerId] = e.target.id.split('-');
     const answerIds = [curAnswerId];
     
@@ -25,13 +24,10 @@ const CurrentTest = () => {
       `${testId}` === `${curTestId}` && answerIds.some((id) => `${id}` === `${curAnswerId}`)
     ));
 
-    console.log(isAnswerChecked);
-
     dispatch(isAnswerChecked ? removeUserAnswer(userAnswer) : addUserAnswer(userAnswer));
   }
 
   const isChecked = (curTestId, curAnswerId) => {
-    console.log(userAnswers);
     const isAnswerChecked = userAnswers.some(({ testId, answerIds }) => (
       `${testId}` === `${curTestId}` && answerIds?.some((id) => `${id}` === `${curAnswerId}`)
     ));

@@ -246,13 +246,11 @@ export default async (app, defaultState = {}) => {
       };
     });
     
-    state.users = state.users.filter(({ id }) => id !== userId)
-      .push({ ...user, tests: newTests });
+    const newUsers = [...state.users.filter(({ id }) => id !== userId), { ...user, tests: newTests }];
 
-    reply.send({ tests: newTests.map((test) => ({ 
-      ...test, 
-      answers: test.answers.map(({ answer, id }) => ({ answer, id })), 
-    }))});
+    state.users = newUsers;
+
+    reply.send({ tests: [] });
   });
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {

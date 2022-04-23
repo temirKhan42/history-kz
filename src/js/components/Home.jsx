@@ -26,7 +26,7 @@ export default function Home() {
     currentChapterName, 
     currentText, 
     tests, 
-    currentChapterId 
+    currentChapterId,
   } = useSelector((state) => state.book);
 
   const HOME_SUMMARY = 'HOME_SUMMARY';
@@ -35,20 +35,19 @@ export default function Home() {
     dispatch(setCurrentPath(window.location.pathname));
 
     if (tests.length === 0) {
+      console.log('from home check tests.length');
       dispatch(fetchTests(auth.user.id));
     }
     
     if (currentText === null) {
+      console.log('from home check current text');
       const INITIAL_CHAPTER_NUM = '1';
       dispatch(fetchData(INITIAL_CHAPTER_NUM));
     }
   }, []);
 
-  console.log(tests);
-
   const handleTestClick = (e) => {
     const chapterTests = _.shuffle(tests.filter(({ chapterId }) => chapterId === currentChapterId));
-    console.log(chapterTests);
     dispatch(setChapterTests(chapterTests));
     dispatch(setCurrentTestIndex(0));
     dispatch(setIsTesting());

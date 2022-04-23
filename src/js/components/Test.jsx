@@ -41,9 +41,8 @@ export default function Test() {
   const handleFinishTest = async () => {
     try {
       const userId = auth.user.id;
-      const data = await postTests({ userId, userAnswers });
+      const { tests } = await postTests({ userId, userAnswers });
       dispatch(resetUserAnswers());
-      dispatch(refreshTest(data));
       dispatch(setIsTesting());
       navigate('/app/home');
     } catch (err) {
@@ -55,30 +54,21 @@ export default function Test() {
     <main>
       <h2>Test</h2>
       <CurrentTest />
-      <button 
-        onClick={handleClick(-1)} 
-        disabled={currentTestIndex - 1 < 0}
-      >
+      <button onClick={handleClick(-1)} disabled={currentTestIndex - 1 < 0}>
         Previous
       </button>
-      
+
+      <button onClick={handleClick(1)} disabled={currentTestIndex + 1 >= chapterTests.length}>
+        Next
+      </button>
+
       {
-        currentTestIndex + 1 >= chapterTests.length &&
         userAnswers.length === chapterTests.length &&
         userAnswers.every(({ answerIds }) => answerIds.length > 0) ? (
-          <button
-            onClick={handleFinishTest}
-          >
+          <button onClick={handleFinishTest} >
             Finish test
           </button>
-        ) : (
-          <button 
-            onClick={handleClick(1)}
-            disabled={currentTestIndex + 1 >= chapterTests.length}
-          >
-            Next
-          </button>
-        )
+        ) : null
       }
     </main>
   );
