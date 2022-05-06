@@ -222,6 +222,7 @@ export default async (app, defaultState = {}) => {
     }
 
     const userAnswerId = getNextId();
+    const date = new Date();
 
     const newTests = user.tests.map((test) => {
       const rightAnswerIds = test.answers
@@ -242,7 +243,7 @@ export default async (app, defaultState = {}) => {
           ...test.userAnswers,
           {
             answerIds: userAnswer.answerIds,
-            date: new Date(),
+            date,
             wasRight,
             id: userAnswerId,
           }
