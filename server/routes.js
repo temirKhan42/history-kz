@@ -62,7 +62,7 @@ const getTests = async (testsStr) => {
       answers,
       userAnswers: [],
       everAnswered: false,
-      howLastTimeAnswered: '',
+      wasLastTimeAnsweredRight: null,
     }
   })
 }
@@ -221,6 +221,8 @@ export default async (app, defaultState = {}) => {
       return;
     }
 
+    const userAnswerId = getNextId();
+
     const newTests = user.tests.map((test) => {
       const rightAnswerIds = test.answers
         .filter(({ isCorrect }) => isCorrect)
@@ -232,20 +234,26 @@ export default async (app, defaultState = {}) => {
         return test;
       }
 
-      return { 
+      const wasRight = _.isEqual(_.sortBy(rightAnswerIds), _.sortBy(userAnswer.answerIds));
+
+      return {
         ...test,
         userAnswers: [
           ...test.userAnswers,
           {
             answerIds: userAnswer.answerIds,
             date: new Date(),
-            wasRight: _.isEqual(_.sortBy(rightAnswerIds), _.sortBy(userAnswer.answerIds)),
+            wasRight,
+            id: userAnswerId,
           }
         ],
         everAnswered: true,
+        wasLastTimeAnsweredRight: wasRight,
       };
     });
     
+    console.log(JSON.stringify(newTests, null, 2));
+
     const newUsers = [...state.users.filter(({ id }) => id !== userId), { ...user, tests: newTests }];
 
     state.users = newUsers;
