@@ -5,10 +5,13 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import SummaryList from './SummaryList.jsx';
 import { 
-  fetchData, 
-  fetchTests, 
-  setCurrentTestIndex, 
+  fetchData,
+  fetchTests,
+  setCurrentTestIndex,
   setChapterTests,
+  setBookParts, 
+  setBookChapters, 
+  setCurrentChapter,
 } from '../slices/bookSlice.js';
 import useAuth from '../hooks/index.js';
 
@@ -22,10 +25,11 @@ const getParsingText = (text) => {
 export default function Home() {
   const dispatch = useDispatch();
   const auth = useAuth();
-  const { 
-    currentChapterName, 
-    currentText, 
-    tests, 
+  const {
+    chapters,
+    currentChapterName,
+    currentText,
+    tests,
     currentChapterId,
   } = useSelector((state) => state.book);
 
@@ -33,16 +37,22 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
-
-    if (tests.length === 0) {
-      console.log('from home check tests.length');
-      dispatch(fetchTests(auth.user.id));
-    }
+    
+    dispatch(setBookParts(auth.user.bookParts));
+    dispatch(setBookChapters(auth.user.chapters));
+    
+    const { id: firstChapterId } = auth.user.chapters[0];
+    dispatch(setCurrentChapter(firstChapterId));
     
     if (currentText === null) {
       console.log('from home check current text');
       const INITIAL_CHAPTER_NUM = '1';
       dispatch(fetchData(INITIAL_CHAPTER_NUM));
+    }
+    
+    if (tests.length === 0) {
+      console.log('from home check tests.length');
+      dispatch(fetchTests(auth.user.id));
     }
   }, []);
 
@@ -55,7 +65,7 @@ export default function Home() {
 
   return (
     <main>
-      <SummaryList summaryFor={HOME_SUMMARY}/>
+      {chapters.length === 0 ? null : <SummaryList summaryFor={HOME_SUMMARY}/>}
       <section>
         <h3>{currentChapterName}</h3>
         <article>

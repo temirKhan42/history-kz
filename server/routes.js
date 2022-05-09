@@ -3,6 +3,7 @@ import HttpErrors from 'http-errors';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import * as fs from 'fs/promises';
+import { BOOK_PART_DICT, BOOK_PARTS } from './data/index.js';
 
 // eslint-disable-next-line no-underscore-dangle
 const __filename = fileURLToPath(import.meta.url);
@@ -10,6 +11,30 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const getNextId = () => Number(_.uniqueId());
+
+const setBookParts = (bookParts) => (bookParts.map((partName, index) => ({
+  id: getNextId(),
+  partName,
+  partNum: index + 1,
+})));
+
+const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
+  .reduce((acc, [part, chapters]) => {
+    const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === parseInt(part));
+    
+    const partChapters = chapters.map((chapterName, index) => {
+      const chapterNum = acc.length + index + 1;
+      return {
+        id: getNextId(),
+        chapterName,
+        partId,
+        chapterNum,
+      };
+    });
+
+    return [...acc, ...partChapters];
+  }, [])
+);
 
 const readfile = async (fileNum) => {
   let filehandle;
@@ -39,7 +64,7 @@ const fetchTests = async () => {
   }
 }
 
-const getTests = async (testsStr) => {
+const getTests = async (testsStr, chapters) => {
   return testsStr.split('\n\n').map((q) => {
     const questionParts = q.split('\n');
     const leng = questionParts.length;
@@ -53,12 +78,14 @@ const getTests = async (testsStr) => {
         isCorrect: rightAnswerNum === (index + 1)
       }
     });
+    
+    const { id: chapterId } = chapters.find(({ chapterNum: num }) => (num === chapterNum));
 
     return {
       question,
       id: getNextId(),
       chapterNum,
-      chapterId: 0,
+      chapterId,
       answers,
       userAnswers: [],
       everAnswered: false,
@@ -70,13 +97,14 @@ const getTests = async (testsStr) => {
 const { Unauthorized, Conflict } = HttpErrors;
 
 const buildState = async () => {
-  const buildTest = async () => {
+  const buildTest = async (chapters) => {
     const testsStr = await fetchTests();
-    const tests = getTests(testsStr);
-    return tests;
+    return getTests(testsStr, chapters);
   };
 
-  const tests = await buildTest();
+  const bookParts = setBookParts(BOOK_PARTS);
+  const chapters = setChapters(BOOK_PART_DICT, bookParts);
+  const tests = await buildTest(chapters);
 
   const state = {
     users: [
@@ -86,6 +114,9 @@ const buildState = async () => {
         password: 'admin', 
         username: 'admin',
         tests,
+        bookParts,
+        chapters,
+        testsResults: [],
       },
     ],
   };
@@ -108,7 +139,11 @@ export default async (app, defaultState = {}) => {
 
     const username = user.username;
     const token = app.jwt.sign({ userId: user.id });
-    reply.send({ token, username, email, id: user.id });
+    
+    const bookParts = setBookParts(BOOK_PARTS);
+    const chapters = setChapters(BOOK_PART_DICT, bookParts);
+
+    reply.send({ token, username, email, id: user.id, bookParts, chapters });
   });
 
   app.post('/api/v1/signup', async (req, reply) => {
@@ -116,21 +151,33 @@ export default async (app, defaultState = {}) => {
     const username = _.get(req, 'body.username');
     const password = _.get(req, 'body.password');
     const user = state.users.find((u) => u.email === email);
-    const testsStr = await fetchTests();
-    const tests = getTests(testsStr);
 
+    const bookParts = setBookParts(BOOK_PARTS);
+    const chapters = setChapters(BOOK_PART_DICT, bookParts);
+
+    const testsStr = await fetchTests();
+    const tests = await getTests(testsStr, chapters);
     if (user) {
       reply.send(new Conflict());
       return;
     }
 
-    const newUser = { id: getNextId(), email, username, password, tests };
+    const newUser = { 
+      id: getNextId(), 
+      email, 
+      username, 
+      password, 
+      tests, 
+      bookParts, 
+      chapters,
+      testsResults: [],
+    };
     const token = app.jwt.sign({ userId: newUser.id });
     state.users.push(newUser);
     reply
       .code(201)
       .header('Content-Type', 'application/json; charset=utf-8')
-      .send({ token, username, email, id: newUser.id });
+      .send({ token, username, email, id: newUser.id, bookParts, chapters });
   });
 
   app.post('/api/v1/changeName', async (req, reply) => {
@@ -203,9 +250,9 @@ export default async (app, defaultState = {}) => {
       return;
     }
 
-    const tests = user.tests.map((test) => ({ 
-      ...test, 
-      answers: test.answers.map(({ answer, id }) => ({ answer, id })), 
+    const tests = user.tests.map((test) => ({
+      ...test,
+      answers: test.answers.map(({ answer, id }) => ({ answer, id })),
     }));
 
     reply.send({ tests });
@@ -214,6 +261,7 @@ export default async (app, defaultState = {}) => {
   app.post('/api/v1/testsAddUserAnswers', async (req, reply) => {
     const userAnswers = _.get(req, 'body.userAnswers');
     const userId = _.get(req, 'body.userId');
+    const chapterId = _.get(req, 'body.chapterId');
     const user = state.users.find(({ id }) => id === userId);
 
     if (!user) {
@@ -252,14 +300,45 @@ export default async (app, defaultState = {}) => {
         wasLastTimeAnsweredRight: wasRight,
       };
     });
-    
-    console.log(JSON.stringify(newTests, null, 2));
 
-    const newUsers = [...state.users.filter(({ id }) => id !== userId), { ...user, tests: newTests }];
+    const chapterTests = newTests.filter(({ chapterId: id }) => `${id}` === `${chapterId}`);
+    
+    const allAnswers = chapterTests.length;
+    const correctAnswers = chapterTests
+      .map(({ userAnswers }) => (userAnswers.find(({ id }) => id === userAnswerId)))
+      .filter(({ wasRight }) => wasRight)
+      .length;
+
+    const testResults = user.testsResults.find(({ chapterId: id }) => id === chapterId) ? 
+      user.testsResults.find(({ chapterId: id }) => id === chapterId).results : 
+      [];
+
+    const newTestsResults = [
+      ...user.testsResults.filter(({ chapterId: id }) => id !== chapterId),
+      {
+        chapterId,
+        results: [
+          ...testResults,
+          {
+            date,
+            allAnswers,
+            correctAnswers,
+          }
+        ]
+      }
+    ]
+
+    const newUsers = [
+      ...state.users.filter(({ id }) => id !== userId), 
+      { 
+        ...user,
+        tests: newTests, 
+        testsResults: newTestsResults,
+      }
+    ];
 
     state.users = newUsers;
-
-    reply.send({ tests: [] });
+    reply.send({ testsResults: newTestsResults });
   });
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {

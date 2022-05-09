@@ -6,32 +6,32 @@ import routes from '../routes/index.js';
 
 const getNextId = () => Number(_.uniqueId());
 
-const setBookParts = (bookParts) => (bookParts.map((partName, index) => ({
-  id: getNextId(),
-  partName,
-  partNum: index + 1,
-})));
+// const setBookParts = (bookParts) => (bookParts.map((partName, index) => ({
+//   id: getNextId(),
+//   partName,
+//   partNum: index + 1,
+// })));
 
-const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
-  .reduce((acc, [part, chapters]) => {
-    const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === parseInt(part));
+// const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
+//   .reduce((acc, [part, chapters]) => {
+//     const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === parseInt(part));
     
-    const partChapters = chapters.map((chapterName, index) => {
-      const chapterNum = acc.length + index + 1;
-      return {
-        id: getNextId(),
-        chapterName,
-        partId,
-        chapterNum,
-      };
-    });
+//     const partChapters = chapters.map((chapterName, index) => {
+//       const chapterNum = acc.length + index + 1;
+//       return {
+//         id: getNextId(),
+//         chapterName,
+//         partId,
+//         chapterNum,
+//       };
+//     });
 
-    return [...acc, ...partChapters];
-  }, [])
-);
+//     return [...acc, ...partChapters];
+//   }, [])
+// );
 
-const bookParts = setBookParts(BOOK_PARTS);
-const chapters = setChapters(BOOK_PART_DICT, bookParts);
+// const bookParts = setBookParts(BOOK_PARTS);
+// const chapters = setChapters(BOOK_PART_DICT, bookParts);
 
 const getData = async (chapterNum) => {
   const data = await axios.post(routes.getText(), { chapterNum });
@@ -59,13 +59,11 @@ export const fetchTests = createAsyncThunk(
   }
 )
 
-const { id: firstChapterId, chapterName: firstChapterName } = chapters[0];
-
 const initialState = {
-  bookParts,
-  chapters,
-  currentChapterId: firstChapterId,
-  currentChapterName: firstChapterName,
+  bookParts: [],
+  chapters: [],
+  currentChapterId: null,
+  currentChapterName: null,
   currentText: null,
   tests: [],
   chapterTests: [],  
@@ -77,6 +75,12 @@ export const bookSlice = createSlice({
   name: 'bookSlice',
   initialState,
   reducers: {
+    setBookParts: (state, action) => {
+      state.bookParts = action.payload;
+    },
+    setBookChapters: (state, action) => {
+      state.chapters = action.payload;
+    },
     setCurrentChapter: (state, action) => {
       const newId = action.payload;
       state.currentChapterId = newId;
@@ -140,7 +144,7 @@ export const bookSlice = createSlice({
             chapterId: id,
           };
         });
-
+        
         return {
           ...state,
           tests,
@@ -155,7 +159,9 @@ export const bookSlice = createSlice({
   }
 });
 
-export const { 
+export const {
+  setBookParts,
+  setBookChapters,
   setCurrentChapter, 
   setChapterTests, 
   setCurrentTestIndex,

@@ -7,7 +7,6 @@ import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import {
   setCurrentTestIndex,
   resetUserAnswers,
-  refreshTest,
 } from '../slices/bookSlice.js';
 import CurrentTest from './CurrentTest.jsx';
 import routes from '../routes/index.js';
@@ -24,7 +23,8 @@ export default function Test() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const { 
+  const {
+    currentChapterId,
     currentTestIndex, 
     chapterTests, 
     userAnswers, 
@@ -41,7 +41,12 @@ export default function Test() {
   const handleFinishTest = async () => {
     try {
       const userId = auth.user.id;
-      const { tests } = await postTests({ userId, userAnswers });
+      const { testsResults } = await postTests({ 
+        userId,
+        userAnswers,
+        chapterId: currentChapterId
+      });
+      console.log(testsResults);
       dispatch(resetUserAnswers());
       dispatch(setIsTesting());
       navigate('/app/home');

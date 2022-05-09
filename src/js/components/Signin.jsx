@@ -13,12 +13,14 @@ import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
 import Footer from './Footer.jsx';
 
+
 const getData = async (values) => {
   const { data } = await axios.post(routes.signup(), values);
   return data;
 };
 
 function SettingForm() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useAuth();
 
