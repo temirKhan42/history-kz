@@ -109,9 +109,9 @@ const buildState = async () => {
   const state = {
     users: [
       {
-        id: 1, 
-        email: 'admin@admin', 
-        password: 'admin', 
+        id: 1,
+        email: 'admin@admin',
+        password: 'admin',
         username: 'admin',
         tests,
         bookParts,
@@ -139,11 +139,16 @@ export default async (app, defaultState = {}) => {
 
     const username = user.username;
     const token = app.jwt.sign({ userId: user.id });
-    
-    const bookParts = setBookParts(BOOK_PARTS);
-    const chapters = setChapters(BOOK_PART_DICT, bookParts);
 
-    reply.send({ token, username, email, id: user.id, bookParts, chapters });
+    reply.send({ 
+      token,
+      username,
+      email,
+      id: user.id,
+      bookParts: user.bookParts,
+      chapters: user.chapters,
+      testsResults: user.testsResults,
+    });
   });
 
   app.post('/api/v1/signup', async (req, reply) => {
@@ -177,7 +182,15 @@ export default async (app, defaultState = {}) => {
     reply
       .code(201)
       .header('Content-Type', 'application/json; charset=utf-8')
-      .send({ token, username, email, id: newUser.id, bookParts, chapters });
+      .send({
+        token, 
+        username, 
+        email, 
+        id: newUser.id, 
+        bookParts, 
+        chapters,
+        testsResults: [],
+      });
   });
 
   app.post('/api/v1/changeName', async (req, reply) => {
@@ -329,10 +342,10 @@ export default async (app, defaultState = {}) => {
     ]
 
     const newUsers = [
-      ...state.users.filter(({ id }) => id !== userId), 
-      { 
+      ...state.users.filter(({ id }) => id !== userId),
+      {
         ...user,
-        tests: newTests, 
+        tests: newTests,
         testsResults: newTestsResults,
       }
     ];

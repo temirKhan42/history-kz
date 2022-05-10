@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/userSlice.js';
-
+import { refreshState } from '../slices/bookSlice.js';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -22,12 +22,13 @@ export default function Header() {
     setIsMenuOpened(!isMenuOpened);
   };
 
-  console.log(currentPath);
-
   const handleExitClick = (e) => {
     e.preventDefault();
     setIsMenuOpened(false);
-    auth.signout(() => navigate('/app/login'));
+    auth.signout(() => {
+      dispatch(refreshState());
+      navigate('/app/login');
+    });
   };
 
   return (

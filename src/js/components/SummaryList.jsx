@@ -6,7 +6,6 @@ import { fetchData } from '../slices/bookSlice.js';
 export default function SummaryList({ summaryFor }) {
   const dispatch = useDispatch();
   const { chapters, currentChapterId, bookParts } = useSelector((state) => state.book);
-  console.log(currentChapterId);
   const [{ partId }] = chapters.filter(({ id }) => id === currentChapterId);
 
   const [currentPart, setCurrentPart] = useState(partId);

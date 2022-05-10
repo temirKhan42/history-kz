@@ -1,37 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import axios from 'axios';
-import { BOOK_PARTS, BOOK_PART_DICT } from '../../data/index.js';
 import routes from '../routes/index.js';
 
-const getNextId = () => Number(_.uniqueId());
-
-// const setBookParts = (bookParts) => (bookParts.map((partName, index) => ({
-//   id: getNextId(),
-//   partName,
-//   partNum: index + 1,
-// })));
-
-// const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
-//   .reduce((acc, [part, chapters]) => {
-//     const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === parseInt(part));
-    
-//     const partChapters = chapters.map((chapterName, index) => {
-//       const chapterNum = acc.length + index + 1;
-//       return {
-//         id: getNextId(),
-//         chapterName,
-//         partId,
-//         chapterNum,
-//       };
-//     });
-
-//     return [...acc, ...partChapters];
-//   }, [])
-// );
-
-// const bookParts = setBookParts(BOOK_PARTS);
-// const chapters = setChapters(BOOK_PART_DICT, bookParts);
 
 const getData = async (chapterNum) => {
   const data = await axios.post(routes.getText(), { chapterNum });
@@ -54,8 +25,8 @@ export const fetchData = createAsyncThunk(
 export const fetchTests = createAsyncThunk(
   'tests/fetchTests',
   async (userId, thunkAPI) => {
-    const response = await getTests(userId);
-    return response.data;
+    const { data } = await getTests(userId);
+    return data;
   }
 )
 
@@ -69,6 +40,7 @@ const initialState = {
   chapterTests: [],  
   userAnswers: [],   // [{ testId, answerIds: [] }, ...]
   currentTestIndex: null,
+  testsResults: [],
 };
 
 export const bookSlice = createSlice({
@@ -92,6 +64,9 @@ export const bookSlice = createSlice({
     },
     setCurrentTestIndex: (state, action) => {
       state.currentTestIndex = action.payload;
+    },
+    setTestsResults: (state, action) => {
+      state.testsResults = action.payload;
     },
     addUserAnswer: (state, action) => {
       const userAnswer = action.payload;
@@ -123,6 +98,17 @@ export const bookSlice = createSlice({
     refreshTest: (state, action) => {
       console.log(action.payload);
       state.tests = action.payload;
+    },
+    refreshState: (state) => {
+      state.bookParts = [];
+      state.chapters = [];
+      state.currentChapterId = null;
+      state.currentChapterName = null;
+      state.currentText = null;
+      state.tests = [];
+      state.chapterTests = [];  
+      state.userAnswers = [];
+      state.currentTestIndex = null;
     }
   },
   extraReducers: (builder) => {
@@ -133,28 +119,8 @@ export const bookSlice = createSlice({
       }
     })
     builder.addCase(fetchTests.fulfilled, (state, action) => {
-      if (action.payload.tests[0]?.chapterId === 0) {
-        const tests = action.payload.tests.map((test) => {
-          const { id } = state.chapters.find(({ chapterNum: num }) => {
-            return (num === test.chapterNum);
-          });
-
-          return {
-            ...test,
-            chapterId: id,
-          };
-        });
-        
-        return {
-          ...state,
-          tests,
-        };
-      }
-
-      return {
-        ...state,
-        tests: action.payload.tests,
-      }
+      console.log(action.payload);
+      state.tests = action.payload.tests;
     })
   }
 });
@@ -165,9 +131,11 @@ export const {
   setCurrentChapter, 
   setChapterTests, 
   setCurrentTestIndex,
+  setTestsResults,
   addUserAnswer,
   removeUserAnswer,
   resetUserAnswers,
+  refreshState,
   refreshTest,
 } = bookSlice.actions;
 

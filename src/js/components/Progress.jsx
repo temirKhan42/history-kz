@@ -4,36 +4,59 @@ import { setCurrentPath } from '../slices/userSlice.js';
 import SummaryList from './SummaryList.jsx';
 import RenderLineChart from './RenderLineChart.jsx';
 import RenderPieChart from './RenderPieChart.jsx';
+import { result } from 'lodash';
 
 
 export default function Progress() {
   const dispatch = useDispatch();
-  const { chapters } = useSelector((state) => state.book);
+  const { 
+    chapters, 
+    testsResults, 
+    currentChapterId, 
+    currentChapterName 
+  } = useSelector((state) => state.book);
+  
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
   }, []);
 
   const PROGRESS_SUMMARY = 'PROGRESS_SUMMARY';
 
-  const data = [
-    {name: '', uv: 400},
-    {name: '', uv: 500},
-    {name: '', uv: 800},
-    {name: '', uv: 100},
-  ];
+  const [chapterData] = testsResults
+    .filter(({ chapterId }) => chapterId === currentChapterId)
+    .map(({ results }) => {
+      return results.map((result) => {
+        return { 
+          ...result, 
+          date: new Date(result.date).toLocaleString('en-GB', { timeZone: 'UTC' }), 
+        }
+      });
+    }); //[ {date: '', allAnswers: 20, correctAnswers: 12} ];
 
-  const dataPie = [
-    { value: 100 },
-    { value: 700 },
-  ];
-
+  const [chapterDataPie] = testsResults
+    .filter(({ chapterId }) => chapterId === currentChapterId)
+    .map(({ results }) => {
+      const { allAnswers, correctAnswers } = results[results.length - 1];
+      console.log(allAnswers, correctAnswers);
+      return [{ value: correctAnswers }, { value: allAnswers - correctAnswers }];
+    })
+    //[{ value: 100 }, { value: 700 }];
+  
+  console.log(chapterDataPie);
   return (
     <main style={{ padding: '1rem 0' }}>
       <h2>Progress</h2>
       {chapters.length === 0 ? null : <SummaryList summaryFor={PROGRESS_SUMMARY}/>}
-      <RenderLineChart data={data} xAxis={'name'} yAxis={'uv'} title={'chapter chart'} />
-      <RenderPieChart data={dataPie} title={'current chapter 1'} />
-      <RenderLineChart data={data} xAxis={'name'} yAxis={'uv'} title={'book chart'} />
+      <RenderLineChart 
+        data={chapterData} 
+        xAxis={'date'} 
+        yAxis={'correctAnswers'} 
+        title={`График пройденных тестов по главе: ${currentChapterName}`}
+      />
+      <RenderPieChart 
+        data={chapterDataPie} 
+        title={`График последнего теста главы ${currentChapterName}`} 
+      />
     </main>
   );
 }

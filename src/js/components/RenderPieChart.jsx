@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import _ from 'lodash';
 
 const COLORS = _.shuffle(['#FFBB28', '#FF8042', '#0088FE', '#00C49F']);
@@ -9,10 +9,10 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
+  const message = index === 0 ? 'Верных ответов' : 'Не верных ответов';
   return (
     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-      {`${(percent * 100).toFixed(2)}% ${index}`}
+      {`${message} ${(percent * 100).toFixed(2)}%`}
     </text>
   );
 };
@@ -37,6 +37,7 @@ const RenderPieChart = ({ data, title }) => {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
+        <Tooltip />
       </PieChart>
       <h3>{title}</h3>
     </>

@@ -6,7 +6,6 @@ export default function AuthProvider({ children }) {
 
   const signin = (callback) => {
     const newUser = JSON.parse(localStorage.getItem('userId'));
-    console.log(newUser);
     setUser(newUser);
     callback();
   };

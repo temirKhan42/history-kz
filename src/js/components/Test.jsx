@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import {
   setCurrentTestIndex,
+  setTestsResults,
   resetUserAnswers,
 } from '../slices/bookSlice.js';
 import CurrentTest from './CurrentTest.jsx';
@@ -25,9 +26,9 @@ export default function Test() {
 
   const {
     currentChapterId,
-    currentTestIndex, 
-    chapterTests, 
-    userAnswers, 
+    currentTestIndex,
+    chapterTests,
+    userAnswers,
   } = useSelector((state) => state.book);
 
   useEffect(() => {
@@ -47,11 +48,12 @@ export default function Test() {
         chapterId: currentChapterId
       });
       console.log(testsResults);
+      dispatch(setTestsResults(testsResults));
       dispatch(resetUserAnswers());
       dispatch(setIsTesting());
       navigate('/app/home');
     } catch (err) {
-      console.error('Some error appear. Your tests did not save.')
+      console.error('Some error appear. Your tests did not save.');
     }
   };
 
