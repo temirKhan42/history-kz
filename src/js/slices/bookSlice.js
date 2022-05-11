@@ -41,6 +41,7 @@ const initialState = {
   userAnswers: [],   // [{ testId, answerIds: [] }, ...]
   currentTestIndex: null,
   testsResults: [],
+  allTestsResults: [],
 };
 
 export const bookSlice = createSlice({
@@ -67,6 +68,9 @@ export const bookSlice = createSlice({
     },
     setTestsResults: (state, action) => {
       state.testsResults = action.payload;
+    },
+    setAllTestsResults: (state, action) => {
+      state.allTestsResults = action.payload;
     },
     addUserAnswer: (state, action) => {
       const userAnswer = action.payload;
@@ -132,6 +136,7 @@ export const {
   setChapterTests, 
   setCurrentTestIndex,
   setTestsResults,
+  setAllTestsResults,
   addUserAnswer,
   removeUserAnswer,
   resetUserAnswers,

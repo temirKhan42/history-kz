@@ -7,6 +7,7 @@ import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import {
   setCurrentTestIndex,
   setTestsResults,
+  setAllTestsResults,
   resetUserAnswers,
 } from '../slices/bookSlice.js';
 import CurrentTest from './CurrentTest.jsx';
@@ -42,13 +43,15 @@ export default function Test() {
   const handleFinishTest = async () => {
     try {
       const userId = auth.user.id;
-      const { testsResults } = await postTests({ 
+      const { testsResults, allTestsResults } = await postTests({ 
         userId,
         userAnswers,
         chapterId: currentChapterId
       });
+      console.log(allTestsResults);
       console.log(testsResults);
       dispatch(setTestsResults(testsResults));
+      dispatch(setAllTestsResults(allTestsResults));
       dispatch(resetUserAnswers());
       dispatch(setIsTesting());
       navigate('/app/home');

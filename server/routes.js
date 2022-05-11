@@ -117,6 +117,7 @@ const buildState = async () => {
         bookParts,
         chapters,
         testsResults: [],
+        allTestsResults: [],
       },
     ],
   };
@@ -315,7 +316,9 @@ export default async (app, defaultState = {}) => {
     });
 
     const chapterTests = newTests.filter(({ chapterId: id }) => `${id}` === `${chapterId}`);
-    
+    const everAnsweredQs = newTests.filter(({ everAnswered }) => everAnswered);
+    const rightAnsweredQs = everAnsweredQs.filter(({ wasLastTimeAnsweredRight }) => wasLastTimeAnsweredRight);
+
     const allAnswers = chapterTests.length;
     const correctAnswers = chapterTests
       .map(({ userAnswers }) => (userAnswers.find(({ id }) => id === userAnswerId)))
@@ -341,17 +344,27 @@ export default async (app, defaultState = {}) => {
       }
     ]
 
+    const newAllTestsResults = [
+      ...user.allTestsResults,
+      {
+        date,
+        everAnsweredQs: everAnsweredQs.length,
+        rightAnsweredQs: rightAnsweredQs.length,
+      }
+    ]
+
     const newUsers = [
       ...state.users.filter(({ id }) => id !== userId),
       {
         ...user,
         tests: newTests,
         testsResults: newTestsResults,
+        allTestsResults: newAllTestsResults,
       }
     ];
 
     state.users = newUsers;
-    reply.send({ testsResults: newTestsResults });
+    reply.send({ testsResults: newTestsResults, allTestsResults: newAllTestsResults });
   });
 
   app.get('/api/v1/data', { preValidation: [app.authenticate] }, (req, reply) => {
