@@ -149,6 +149,7 @@ export default async (app, defaultState = {}) => {
       bookParts: user.bookParts,
       chapters: user.chapters,
       testsResults: user.testsResults,
+      allTestsResults: user.allTestsResults,
     });
   });
 
@@ -177,6 +178,7 @@ export default async (app, defaultState = {}) => {
       bookParts, 
       chapters,
       testsResults: [],
+      allTestsResults: [],
     };
     const token = app.jwt.sign({ userId: newUser.id });
     state.users.push(newUser);
@@ -191,6 +193,7 @@ export default async (app, defaultState = {}) => {
         bookParts, 
         chapters,
         testsResults: [],
+        allTestsResults: [],
       });
   });
 

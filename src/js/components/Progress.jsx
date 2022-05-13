@@ -11,44 +11,40 @@ export default function Progress() {
   const dispatch = useDispatch();
   const { 
     chapters, 
+    tests,
     testsResults,
     allTestsResults,
     currentChapterId, 
     currentChapterName 
   } = useSelector((state) => state.book);
-  
+
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
   }, []);
 
   const PROGRESS_SUMMARY = 'PROGRESS_SUMMARY';
 
-  const [chapterData] = testsResults
-    .filter(({ chapterId }) => chapterId === currentChapterId)
-    ?.map(({ results }) => {
-      return results.map((result) => {
-        return {
-          ...result,
-          date: new Date(result.date).toLocaleString('en-GB', { timeZone: 'UTC' }),
-        }
-      });
-    }); //[ {date: '', allAnswers: 20, correctAnswers: 12} ];
+  const chapterTests = testsResults.filter(({ chapterId }) => chapterId === currentChapterId);
 
-  const [chapterDataPie] = testsResults
-    .filter(({ chapterId }) => chapterId === currentChapterId)
-    ?.map(({ results }) => {
-      const { allAnswers, correctAnswers } = results[results.length - 1];
-      return [{ value: correctAnswers }, { value: allAnswers - correctAnswers }];
-    })
-    //[{ value: 100 }, { value: 700 }];
-  
-  const dataAr = [
-    { name: 'Page A', uv: 4000, pv: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398 },
-    { name: 'Page C', uv: 2000, pv: 9800 },
-  ];
+  const [chapterData] = chapterTests ? chapterTests.map(({ results }) => {
+    return results.map((result) => {
+      return {
+        ...result,
+        date: new Date(result.date).toLocaleString('en-GB', { timeZone: 'UTC' }),
+      }
+    });
+  }) : [[]]; //[ {date: '', allAnswers: 20, correctAnswers: 12} ];
+
+  const [chapterDataPie] = chapterTests ? chapterTests.map(({ results }) => {
+    const { allAnswers, correctAnswers } = results[results.length - 1];
+    return [{ value: correctAnswers }, { value: allAnswers - correctAnswers }];
+  }) : [[]]; //[{ value: 100 }, { value: 400 }]
+
   // [{ date: '', rightAnsweredQs: 8, everAnsweredQs: 12 }]
-  
+  const [allTestsResultsPie] = allTestsResults.map(({ rightAnsweredQs }) => {
+    return [{ value: rightAnsweredQs }, { value: tests.length - rightAnsweredQs }];
+  }).reverse();
+
   return (
     <main style={{ padding: '1rem 0' }}>
       <h2>Progress</h2>
@@ -63,7 +59,14 @@ export default function Progress() {
         data={chapterDataPie} 
         title={`График последнего теста главы ${currentChapterName}`} 
       />
-      <RenderAreaChart data={allTestsResults} />
+      <RenderAreaChart 
+        data={allTestsResults} 
+        title={'График всех правильных ответов ко всем отвеченным вопросам'}
+      />
+      <RenderPieChart
+        data={allTestsResultsPie} 
+        title={`График всех правильных ответов ко всем вопросам`} 
+      />
     </main>
   );
 }
