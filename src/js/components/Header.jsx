@@ -4,6 +4,7 @@ import useAuth from '../hooks/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/userSlice.js';
 import { refreshState } from '../slices/bookSlice.js';
+import logo from '../../../images/logo.svg';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -32,29 +33,35 @@ export default function Header() {
   };
 
   return (
-    <div>
-      <header>
-        <nav>
-          <div>Logo</div>
-          {
-            auth?.user?.username && !isTesting ?
-              (<button type="button" onClick={handleClick}>
-                {auth?.user?.username}
-              </button>) : null
-          }
-          {
-            isMenuOpened && !isTesting ? 
-            (
-              <ul>
-                <li><Link to="/app/home">Home</Link></li>
-                <li><Link to="/app/progress">My progress</Link></li>
-                <li><Link to="/app/settings">Settings</Link></li>
-                <li><a onClick={handleExitClick}>Exit</a></li>
-              </ul>
-            ) :
-            null
-          }
-        </nav>
+    <div className='body'>
+      <header className="header">
+        <div className='box flex jc-sb ai-c'>
+          <div className='logoBox'>
+            <img src={logo} alt="logo" className='logo' />
+          </div>
+          <nav className='navBar' onMouseEnter={handleClick} onMouseLeave={handleClick}>
+            {
+              auth?.user?.username && !isTesting ?
+                (<button type="button" className="menuButton">
+                  {auth?.user?.username}
+                </button>) : null
+            }
+            {
+              isMenuOpened && !isTesting ? 
+              (
+                <div className="menu">
+                  <ul>
+                    <li><Link to="/app/home">Home</Link></li>
+                    <li><Link to="/app/progress">My progress</Link></li>
+                    <li><Link to="/app/settings">Settings</Link></li>
+                    <li><Link to="#" onClick={handleExitClick}>Exit</Link></li>
+                  </ul>
+                </div>
+              ) :
+              null
+            }
+          </nav>
+        </div>
       </header>
       <Outlet />
     </div>

@@ -1,0 +1,35 @@
+.footer {
+  width: 100vw;
+  margin: 0 auto;
+  padding: 40px 15px;
+  background-color: hsl(240, 70, 65);
+
+  .footerBox {
+    width: 90%;
+    margin: 0 auto;
+
+    a,
+    i {
+      color: white;
+      display: block;
+      
+      &:first-child {
+        margin-bottom: 10px;
+      }
+    }
+
+    i {
+      text-align: center;
+    }
+  }
+}
+
+.copyRight {
+  width: 100vw;
+  margin: 0 auto;
+  padding: 5px 15px;
+  background-color: hsl(0, 10, 60);
+  text-align: center;
+  color: hsl(0, 10, 10);
+  font-size: 14px;
+}

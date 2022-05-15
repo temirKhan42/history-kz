@@ -66,8 +66,8 @@ function SettingForm() {
   });
 
   return (
-    <div>
-      <h3>Регистрация</h3>
+    <div className='loginBox'>
+      <h2 className='title'>Регистрация</h2>
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="username">Username</label>
         <input
@@ -75,11 +75,12 @@ function SettingForm() {
           name="username"
           type="text"
           required
+          placeholder='Username'
           onChange={formik.handleChange}
           value={formik.values.username}
         />
         {formik.errors.username && formik.touched.username ? (
-          <div>{formik.errors.username}</div>
+          <div className='errMessage'>{formik.errors.username}</div>
         ) : null}
 
         <label htmlFor="email">Email</label>
@@ -88,11 +89,12 @@ function SettingForm() {
           name="email"
           type="email"
           required
+          placeholder='Email'
           onChange={formik.handleChange}
           value={formik.values.email}
         />
         {formik.errors.email && formik.touched.email ? (
-          <div>{formik.errors.email}</div>
+          <div className='errMessage'>{formik.errors.email}</div>
         ) : null}
 
         <label htmlFor="password">Password</label>
@@ -101,11 +103,12 @@ function SettingForm() {
           name="password"
           type="password"
           required
+          placeholder='Password'
           onChange={formik.handleChange}
           value={formik.values.password}
         />
         {formik.errors.password && formik.touched.password ? (
-          <div>{formik.errors.password}</div>
+          <div className='errMessage'>{formik.errors.password}</div>
         ) : null}
 
         <label htmlFor="passwordConfirm">Confirm password</label>
@@ -114,15 +117,18 @@ function SettingForm() {
           name="passwordConfirm"
           type="password"
           required
+          placeholder='Confirm password'
           onChange={formik.handleChange}
           value={formik.values.passwordConfirm}
         />
         {formik.errors.passwordConfirm && formik.touched.passwordConfirm ? (
-          <div>{formik.errors.passwordConfirm}</div>
+          <div className='errMessage'>{formik.errors.passwordConfirm}</div>
         ) : null}
 
-        <button type="submit">Зарегистрироваться</button>
+        <button className='loginBtn' type="submit">Зарегистрироваться</button>
       </form>
+
+      <Link className='link' to="/app/login">Уже зарегистрирован</Link>
     </div>
   );
 }
@@ -138,7 +144,6 @@ export default function Settings() {
     <>
       <main>
         {SettingForm()}
-        <Link to="/app/login">Уже зарегистрирован</Link>
       </main>
       <Footer />
     </>

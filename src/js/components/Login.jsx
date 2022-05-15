@@ -47,8 +47,8 @@ function LoginForm() {
   });
 
   return (
-    <div>
-      <h3>Войти</h3>
+    <div className='loginBox'>
+      <h2 className='title'>Войти</h2>
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
@@ -56,6 +56,7 @@ function LoginForm() {
           name="email"
           type="email"
           required
+          placeholder='Email'
           onChange={formik.handleChange}
           value={formik.values.email}
           disabled={formik.isSubmitting}
@@ -67,19 +68,22 @@ function LoginForm() {
           name="password"
           type="password"
           required
+          placeholder='Password'
           onChange={formik.handleChange}
           value={formik.values.password}
           disabled={formik.isSubmitting}
         />
         {isUnauthorizedErr ? (
-          <div>Не верный логин или пороль</div>
+          <div className='errMessage'>Не верный логин или пороль</div>
         ) : null}
         {isRequestSuccess ? null : (
-          <div>Неизвестная ошибка, проверьте интернет соединение.</div>
+          <div className='errMessage'>Неизвестная ошибка, проверьте интернет соединение.</div>
         )}
 
-        <button type="submit" disabled={formik.isSubmitting}>Войти</button>
+        <button className='loginBtn' type="submit" disabled={formik.isSubmitting}>Войти</button>
       </form>
+
+      <Link className='link' to="/app/signin">Регистрация</Link>
     </div>
   );
 }
@@ -94,7 +98,6 @@ export default function Home() {
     <>
       <main>
         {LoginForm()}
-        <Link to="/app/signin">Регистрация</Link>
       </main>
       <Footer />
     </>

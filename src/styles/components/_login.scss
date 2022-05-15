@@ -1,0 +1,37 @@
+.loginBox {
+  width: 50vw;
+  margin: 20vh auto 20vh auto;
+  text-align: center;
+  padding: 30px 0;
+  background-color: hsl(100, 0, 95);
+
+  .title {
+    margin-bottom: 15px;
+  }
+
+  input {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    background-color: antiquewhite;
+    font-size: 18px;
+  }
+
+  .errMessage {
+    display: inline-block;
+    color: white;
+    background-color: red;
+    width: auto;
+    padding: 3px 20px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+  }
+
+  .loginBtn {
+    margin-bottom: 15px;
+  }
+
+  .link {
+    color: black;
+  }
+}
