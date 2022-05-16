@@ -3,7 +3,7 @@
   height: 80px;
   margin: 0 auto;
   padding: 15px;
-  background-color: hsl(240, 70, 65);
+  background-color: hsl(100, 0, 95);
 
   .box {
     width: 90%;
@@ -12,7 +12,7 @@
     .logoBox {
       width: 50px;
       height: 50px;
-      background-color: black;
+      background-color: hsl(240, 70, 65);
     }
   
     .navBar {  
@@ -32,7 +32,7 @@
         display: block;
         width: 100%;
         position: absolute;
-        background-color: cadetblue;
+        background-color: hsla(270, 80, 60, 90%);
 
         li {
           padding: 10px;
