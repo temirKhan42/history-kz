@@ -1,0 +1,52 @@
+.home {
+  .content {
+    padding: 20px;
+    background-color: hsla(270, 80, 60, 70%);
+    width: 20vw;
+    height: 60vh;
+    overflow: auto;
+    position: absolute;
+    top: 20vh;
+  
+    .title {
+      font-weight: 600;
+      font-size: 20px;
+      color: hsl(200, 80, 15);
+      display: inline-block;
+      margin: 15px 15px 20px 0;
+      text-decoration: underline;
+    }
+
+    li {
+      min-width: 200px;
+      margin-bottom: 15px;
+    }
+    
+    .liPart {
+      color: hsl(200, 80, 15);
+      margin-bottom: 15px;
+    }
+
+    .liChapter {
+      margin-left: 10px;
+
+      &:first-child {
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .subject {
+    width: 80vw;
+    margin-left: 20vw;
+    background-color: aqua;
+    padding: 150px 80px;
+
+    .chapterName {
+      font-size: 25px;
+      font-weight: 400;
+      margin-bottom: 40px;
+    }
+  }
+}
+

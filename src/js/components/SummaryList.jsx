@@ -23,25 +23,27 @@ export default function SummaryList({ summaryFor }) {
     }
   };
 
-  return (<section>
-    <h4>Содержание</h4>
-    <ul>
-      { bookParts.map(({ partName, id }) => (
-        <li key={`${id}${partName}`}>
-          <a href="#" onClick={handleShowPart(id)}>{partName}</a>
-          {currentPart === id ? (<ul>
-            {
-              chapters
-                .filter(({ partId }) => partId === currentPart)
-                .map(({ chapterName, id: chapterId, chapterNum }) => (
-                  <li key={`${id}${chapterId}`}>
-                    <a href='#' onClick={handleShowChapter(chapterId, chapterNum)}>{chapterName}</a>
-                  </li>
-                ))
-            }
-          </ul>) : null}
-        </li>
-      )) }
-    </ul>
-  </section>)
+  return (
+    <section className='content'>
+      <h4 className='title'>Содержание</h4>
+      <ul>
+        { bookParts.map(({ partName, id }) => (
+          <li key={`${id}${partName}`}>
+            <a className='liPart' href="#" onClick={handleShowPart(id)}>{partName}</a>
+            {currentPart === id ? (<ul>
+              {
+                chapters
+                  .filter(({ partId }) => partId === currentPart)
+                  .map(({ chapterName, id: chapterId, chapterNum }) => (
+                    <li className='liChapter' key={`${id}${chapterId}`}>
+                      <a href='#' onClick={handleShowChapter(chapterId, chapterNum)}>{chapterName}</a>
+                    </li>
+                  ))
+              }
+            </ul>) : null}
+          </li>
+        )) }
+      </ul>
+    </section>
+  )
 };

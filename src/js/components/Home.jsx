@@ -65,10 +65,10 @@ export default function Home() {
   };
 
   return (
-    <main>
+    <main className='home'>
       {chapters.length === 0 ? null : <SummaryList summaryFor={HOME_SUMMARY}/>}
-      <section>
-        <h3>{currentChapterName}</h3>
+      <section className='subject'>
+        <h3 className='chapterName'>{currentChapterName}</h3>
         <article>
           {currentText === null ? null : getParsingText(currentText)}
         </article>
