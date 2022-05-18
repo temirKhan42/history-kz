@@ -12,7 +12,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   const message = index === 0 ? 'Верных ответов' : 'Не верных ответов';
   return (
     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-      {`${message} ${(percent * 100).toFixed(2)}%`}
+      {`${(percent * 100).toFixed(2)}%`}
     </text>
   );
 };
@@ -20,6 +20,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 const RenderPieChart = ({ data, title }) => {
   return (
     <>
+      <h3 className='graphTitle'>{title}</h3>
       <PieChart width={200} height={200}>
         <Pie
           startAngle={90}
@@ -39,7 +40,6 @@ const RenderPieChart = ({ data, title }) => {
         </Pie>
         <Tooltip />
       </PieChart>
-      <h3>{title}</h3>
     </>
   );
 }

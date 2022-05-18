@@ -3,6 +3,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
 const RenderLineChart = ({ data, xAxis, yAxis, title }) => (
   <>
+    <h3 className='graphTitle'>{title}</h3>
     <LineChart
       width={600}
       height={300}
@@ -15,7 +16,6 @@ const RenderLineChart = ({ data, xAxis, yAxis, title }) => (
       <YAxis />
       <Tooltip />
     </LineChart>
-    <h3>{title}</h3>
   </>
 );
 

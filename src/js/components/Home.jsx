@@ -10,7 +10,7 @@ import {
   setCurrentTestIndex,
   setChapterTests,
   setBookParts, 
-  setBookChapters, 
+  setBookChapters,
   setCurrentChapter,
   setTestsResults,
 } from '../slices/bookSlice.js';
@@ -72,8 +72,8 @@ export default function Home() {
         <article>
           {currentText === null ? null : getParsingText(currentText)}
         </article>
+        <Link className="link" to="/app/test" onClick={handleTestClick}>Test</Link>
       </section>
-      <Link to="/app/test" onClick={handleTestClick}>Test</Link>
     </main>
   );
 }

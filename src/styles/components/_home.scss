@@ -1,7 +1,20 @@
 .home {
+  &.progress {
+    background-color: hsl(100, 0, 98);
+    
+    .subject {
+      padding-top: 4vw;
+    }
+
+    .graphTitle {
+      margin: 25px 0;
+      font-weight: 600;
+    }
+  }
+
   .content {
     padding: 20px;
-    background-color: hsla(270, 80, 60, 70%);
+    background-color: hsla(270, 80, 80, 60%);
     width: 20vw;
     height: 60vh;
     overflow: auto;
@@ -39,13 +52,36 @@
   .subject {
     width: 80vw;
     margin-left: 20vw;
-    background-color: aqua;
-    padding: 150px 80px;
+    padding: 8vw 13vw 100px 8vw;
 
     .chapterName {
       font-size: 25px;
       font-weight: 400;
       margin-bottom: 40px;
+    }
+
+    article {
+      p {
+        margin-bottom: 15px;
+        font-size: 18px;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.5;
+      
+        &:last-child {
+          margin-bottom: 80px;
+        }
+      }
+    }
+
+    .link {
+      padding: 0 70px;
+      display: inline-block;
+      height: 30px;
+      line-height: 1.8;
+      margin-left: auto;
+      margin-right: 0;
+      background-color: blueviolet;
+      text-decoration: none;
     }
   }
 }

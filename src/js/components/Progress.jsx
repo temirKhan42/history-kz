@@ -46,27 +46,28 @@ export default function Progress() {
   }).reverse();
 
   return (
-    <main style={{ padding: '1rem 0' }}>
-      <h2>Progress</h2>
+    <main className="home progress" style={{ padding: '1rem 0' }}>
       {chapters.length === 0 ? null : <SummaryList summaryFor={PROGRESS_SUMMARY}/>}
-      <RenderLineChart
-        data={chapterData}
-        xAxis={'date'}
-        yAxis={'correctAnswers'}
-        title={`График пройденных тестов по главе: ${currentChapterName}`}
-      />
-      <RenderPieChart
-        data={chapterDataPie} 
-        title={`График последнего теста главы ${currentChapterName}`} 
-      />
-      <RenderAreaChart 
-        data={allTestsResults} 
-        title={'График всех правильных ответов ко всем отвеченным вопросам'}
-      />
-      <RenderPieChart
-        data={allTestsResultsPie} 
-        title={`График всех правильных ответов ко всем вопросам`} 
-      />
+      <section className='subject'>
+        <RenderLineChart
+          data={chapterData}
+          xAxis={'date'}
+          yAxis={'correctAnswers'}
+          title={`График пройденных тестов по главе: ${currentChapterName}`}
+        />
+        <RenderPieChart
+          data={chapterDataPie} 
+          title={`График последнего теста главы ${currentChapterName}`} 
+        />
+        <RenderAreaChart 
+          data={allTestsResults} 
+          title={'График всех правильных ответов ко всем отвеченным вопросам'}
+        />
+        <RenderPieChart
+          data={allTestsResultsPie} 
+          title={`График всех правильных ответов ко всем вопросам`} 
+        />
+      </section>
     </main>
   );
 }

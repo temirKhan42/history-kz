@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const RenderAreaChart = ({ data, title }) => {
   return (
     <>
+      <h3 className='graphTitle'>{title}</h3>
       <AreaChart
         width={600}
         height={300}
@@ -22,7 +23,6 @@ const RenderAreaChart = ({ data, title }) => {
         <Area type="monotone" dataKey="everAnsweredQs" stackId="1" stroke="#8884d8" fill="#8884d8" />
         <Area type="monotone" dataKey="rightAnsweredQs" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
       </AreaChart>
-      <h3>{title}</h3>
     </>
   )
 };
