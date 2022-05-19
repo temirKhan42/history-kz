@@ -61,8 +61,7 @@ export default function Test() {
   };
 
   return (
-    <main>
-      <h2>Test</h2>
+    <main className="test">
       <CurrentTest />
       <button onClick={handleClick(-1)} disabled={currentTestIndex - 1 < 0}>
         Previous

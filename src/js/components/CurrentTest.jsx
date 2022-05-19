@@ -38,14 +38,14 @@ const CurrentTest = () => {
   const test = chapterTests[currentTestIndex];
 
   return (
-    <div>
-      <h4>{currentTestIndex + 1}</h4>
-      <p>{test?.question}</p>
+    <div className='currentTest'>
+      <h4 className='title'>{currentTestIndex + 1})</h4>
+      <p className='question'>{test?.question}</p>
       <form>
         <ul>
           {test?.answers.map(({ answer, id }) => {
             return (
-              <li key={`${test?.id}-${id}`}>
+              <li className='answer' key={`${test?.id}-${id}`}>
                 <label htmlFor={`${test?.id}-${id}`}>{answer}</label>
                 <input
                   type="checkbox"

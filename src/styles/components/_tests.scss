@@ -1,0 +1,32 @@
+.test {
+  .currentTest {
+    background-color: aqua;
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px;
+
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .answer {
+      background-color: blue;
+      margin-left: 20px;
+
+      label {
+        display: block;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
