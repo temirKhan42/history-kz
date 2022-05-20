@@ -63,22 +63,24 @@ export default function Test() {
   return (
     <main className="test">
       <CurrentTest />
-      <button onClick={handleClick(-1)} disabled={currentTestIndex - 1 < 0}>
-        Previous
-      </button>
+      <div className="dirrectBtns flex">
+        <button onClick={handleClick(-1)} disabled={currentTestIndex - 1 < 0}>
+          Previous
+        </button>
 
-      <button onClick={handleClick(1)} disabled={currentTestIndex + 1 >= chapterTests.length}>
-        Next
-      </button>
+        <button onClick={handleClick(1)} disabled={currentTestIndex + 1 >= chapterTests.length}>
+          Next
+        </button>
 
-      {
-        userAnswers.length === chapterTests.length &&
-        userAnswers.every(({ answerIds }) => answerIds.length > 0) ? (
-          <button onClick={handleFinishTest} >
-            Finish test
-          </button>
-        ) : null
-      }
+        {
+          userAnswers.length === chapterTests.length &&
+          userAnswers.every(({ answerIds }) => answerIds.length > 0) ? (
+            <button onClick={handleFinishTest} >
+              Finish test
+            </button>
+          ) : null
+        }
+      </div>
     </main>
   );
 }

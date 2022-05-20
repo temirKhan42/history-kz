@@ -1,9 +1,16 @@
 .test {
   .currentTest {
-    background-color: aqua;
     width: 90%;
     margin: 0 auto;
     padding: 30px;
+
+    .chapterTitle {
+      font-size: 22px;
+      font-weight: 600;
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+    }
 
     .title {
       font-size: 20px;
@@ -14,10 +21,10 @@
     .question {
       padding-left: 20px;
       margin-bottom: 20px;
+      font-size: 18px;
     }
 
     .answer {
-      background-color: blue;
       margin-left: 20px;
 
       label {
@@ -26,6 +33,51 @@
 
       &:not(:last-child) {
         margin-bottom: 15px;
+      }
+
+      input {
+        visibility: hidden;
+      }
+
+      .checkbox {
+        display: inline-block;
+        height: 15px;
+
+        &:checked {
+          &::after {
+            background-color: blue;
+          }
+        }
+
+        &::after {
+          content: '';
+          visibility: visible;
+          display: block;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background-color: hsl(50, 50, 90);
+        }
+      }
+
+      .text {
+        font-size: 18px;
+        margin-left: 20px;
+      }
+    }
+  }
+
+  .dirrectBtns {
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px;
+
+    button {
+      margin: 0;
+      margin-right: 20px;
+
+      &:disabled {
+        background-color: hsl(50, 50, 90);
       }
     }
   }

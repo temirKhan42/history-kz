@@ -9,6 +9,7 @@ const CurrentTest = () => {
     currentTestIndex,
     chapterTests,
     userAnswers,
+    currentChapterName,
   } = useSelector((state) => state.book);
 
   const handleChange = (e) => {
@@ -39,15 +40,16 @@ const CurrentTest = () => {
 
   return (
     <div className='currentTest'>
+      <h3 className='chapterTitle'>{currentChapterName}</h3>
       <h4 className='title'>{currentTestIndex + 1})</h4>
       <p className='question'>{test?.question}</p>
       <form>
         <ul>
           {test?.answers.map(({ answer, id }) => {
             return (
-              <li className='answer' key={`${test?.id}-${id}`}>
-                <label htmlFor={`${test?.id}-${id}`}>{answer}</label>
+              <li className='answer flex ai-c' key={`${test?.id}-${id}`}>
                 <input
+                  className='checkbox'
                   type="checkbox"
                   onChange={handleChange}
                   checked={!!(isChecked(test?.id, id))}
@@ -55,6 +57,7 @@ const CurrentTest = () => {
                   value={`${test?.id}-${id}`}
                   id={`${test?.id}-${id}`}
                 />
+                <label className='text' htmlFor={`${test?.id}-${id}`}>{answer}</label>
               </li>
             )
           })}

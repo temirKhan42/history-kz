@@ -21,7 +21,7 @@ const RenderPieChart = ({ data, title }) => {
   return (
     <>
       <h3 className='graphTitle'>{title}</h3>
-      <PieChart width={200} height={200}>
+      <PieChart width={400} height={400}>
         <Pie
           startAngle={90}
           endAngle={-270}
@@ -30,7 +30,7 @@ const RenderPieChart = ({ data, title }) => {
           cy="50%"
           labelLine={false}
           label={renderCustomizedLabel}
-          outerRadius={80}
+          outerRadius={120}
           fill="#8884d8"
           dataKey="value"
         >
