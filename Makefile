@@ -22,3 +22,8 @@ build:
 	rm -rf dist
 	NODE_ENV=production npx webpack --mode production
 
+deply:
+	git push heroku main:main
+
+heroku-login:
+	heroku git:remote -a kz-history
