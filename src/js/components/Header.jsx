@@ -4,7 +4,7 @@ import useAuth from '../hooks/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/userSlice.js';
 import { refreshState } from '../slices/bookSlice.js';
-import logo from '../../../images/logo.svg';
+import logo from '../../../images/sdu-logo.svg';
 
 export default function Header() {
   const dispatch = useDispatch();
