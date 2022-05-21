@@ -9,9 +9,12 @@
     width: 90%;
     margin: 0 auto;
 
-    .logo {
+    .logoBox {
       width: 100px;
       height: 100px;
+      position: relative;
+      top: -25px;
+      left: -25px;
     }
   
     .navBar {  
