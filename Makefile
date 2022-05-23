@@ -22,7 +22,7 @@ build:
 	rm -rf dist
 	NODE_ENV=production npx webpack --mode production
 
-deply:
+deploy:
 	git push heroku main:main
 
 heroku-login:
