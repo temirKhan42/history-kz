@@ -20,6 +20,9 @@ export default function SummaryList({ summaryFor }) {
     if (summaryFor === 'HOME_SUMMARY' && id !== currentChapterId) {
       dispatch(setCurrentChapter(id));
       dispatch(fetchData(chapterNum));
+    } else if (summaryFor === 'PROGRESS_SUMMARY' && id !== currentChapterId) {
+      dispatch(setCurrentChapter(id));
+      dispatch(fetchData(chapterNum));
     }
   };
 
