@@ -49,6 +49,12 @@ export default function Progress() {
     <main className="home progress" style={{ padding: '1rem 0' }}>
       {chapters.length === 0 ? null : <SummaryList summaryFor={PROGRESS_SUMMARY}/>}
       <section className='subject'>
+        <RenderAreaChart 
+          data={chapterData} 
+          xAxis={'date'}
+          yAxis={'correctAnswers'}
+          title={`График пройденных тестов по главе: ${currentChapterName}`}
+        />
         <RenderLineChart
           data={chapterData}
           xAxis={'date'}
