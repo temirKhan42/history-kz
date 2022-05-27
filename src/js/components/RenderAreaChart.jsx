@@ -20,8 +20,7 @@ const RenderAreaChart = ({ data, title }) => {
         <XAxis dataKey="date" />
         <YAxis />
         <Tooltip />
-        <Area type="monotone" dataKey="everAnsweredQs" stackId="1" stroke="#8884d8" fill="#8884d8" />
-        <Area type="monotone" dataKey="rightAnsweredQs" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+        <Area type="monotone" dataKey="correctAnswers" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
       </AreaChart>
     </>
   )

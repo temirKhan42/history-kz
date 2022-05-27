@@ -55,18 +55,15 @@ export default function Progress() {
           yAxis={'correctAnswers'}
           title={`График пройденных тестов по главе: ${currentChapterName}`}
         />
-        <RenderLineChart
-          data={chapterData}
-          xAxis={'date'}
-          yAxis={'correctAnswers'}
-          title={`График пройденных тестов по главе: ${currentChapterName}`}
-        />
         <RenderPieChart
           data={chapterDataPie} 
           title={`График последнего теста главы ${currentChapterName}`} 
         />
-        <RenderAreaChart 
-          data={allTestsResults} 
+        <RenderLineChart
+          data={allTestsResults}
+          date={'date'} 
+          line1={'rightAnsweredQs'} 
+          line2={'everAnsweredQs'}
           title={'График всех правильных ответов ко всем отвеченным вопросам'}
         />
         <RenderPieChart
