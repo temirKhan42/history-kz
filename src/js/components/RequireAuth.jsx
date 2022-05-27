@@ -6,6 +6,7 @@ export default function RequireAuth({ children }) {
   const auth = useAuth();
   const location = useLocation();
 
+  console.log(auth);
   return auth.isAuthenticated()
     ? children
     : <Navigate to="/app/login" state={{ from: location }} replace />;

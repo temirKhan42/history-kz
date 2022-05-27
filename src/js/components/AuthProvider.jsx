@@ -2,7 +2,8 @@ import React from 'react';
 import AuthContext from '../context/index.jsx';
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = React.useState(null);
+  const userInitialValue = JSON.parse(localStorage.getItem('userId'));
+  const [user, setUser] = React.useState(userInitialValue);
 
   const signin = (callback) => {
     const newUser = JSON.parse(localStorage.getItem('userId'));
