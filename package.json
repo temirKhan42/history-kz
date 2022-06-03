@@ -61,6 +61,7 @@
     "@babel/runtime": "^7.17.2",
     "@reduxjs/toolkit": "^1.8.0",
     "axios": "^0.26.0",
+    "bootstrap": "^5.2.0-beta1",
     "clean-webpack-plugin": "^4.0.0",
     "fastify": "^3.27.1",
     "fastify-jwt": "^4.1.3",

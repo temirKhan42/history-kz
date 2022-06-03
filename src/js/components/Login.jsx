@@ -47,32 +47,43 @@ function LoginForm() {
   });
 
   return (
-    <div className='loginBox'>
-      <h2 className='title'>Войти</h2>
+    <div className='loginBox px-7'>
+      <h2 className='h1 mb-5'>Войти</h2>
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder='Email'
-          onChange={formik.handleChange}
-          value={formik.values.email}
-          disabled={formik.isSubmitting}
-        />
+        <div class="mb-3 row">
+          <label className='col-sm-2 col-form-label' htmlFor="email">Email</label>
+          <div class="col-sm-10">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder='Email'
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              disabled={formik.isSubmitting}
+              className="form-control"
+            />
+          </div>
+        </div>
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          placeholder='Password'
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          disabled={formik.isSubmitting}
-        />
+        <div class="mb-3 row">
+          <label className='col-sm-2 col-form-label' htmlFor="password">Password</label>
+          <div class="col-sm-10">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder='Password'
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              disabled={formik.isSubmitting}
+              className="form-control"
+            />
+          </div>
+        </div>
+
         {isUnauthorizedErr ? (
           <div className='errMessage'>Не верный логин или пороль</div>
         ) : null}
@@ -80,10 +91,10 @@ function LoginForm() {
           <div className='errMessage'>Неизвестная ошибка, проверьте интернет соединение.</div>
         )}
 
-        <button className='loginBtn' type="submit" disabled={formik.isSubmitting}>Войти</button>
+        <button type="button" className="btn btn-primary mb-3" type="submit" disabled={formik.isSubmitting}>Войти</button>
       </form>
 
-      <Link className='link' to="/app/signin">Регистрация</Link>
+      <Link className='btn btn-link' to="/app/signin">Регистрация</Link>
     </div>
   );
 }
@@ -96,8 +107,14 @@ export default function Home() {
 
   return (
     <>
-      <main>
-        {LoginForm()}
+      <main className='loginMain row'>
+        <img className='hero' src="../../../images/sduBack.jpg" alt="hero" />
+        <div className='col'>
+          <h1 className='text-uppercase h1'>Книга для подготовки к ент</h1>
+        </div>
+        <div className='col px-5'>
+          {LoginForm()}
+        </div>
       </main>
       <Footer />
     </>

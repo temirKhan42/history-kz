@@ -1,6 +1,7 @@
 import { render } from 'react-dom';
 import React from 'react';
 
+import bootstrap from 'bootstrap';
 import '../styles/index.scss';
 import { store } from './store/index.js';
 import { Provider } from 'react-redux';
