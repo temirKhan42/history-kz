@@ -1,4 +1,11 @@
 .loginMain {
+  
+  .heroTitle {
+    h1 {
+      color: white;
+      background-color: hsl(0, 90, 65);
+    }
+  }
 
   .hero {
     width: 100%;
@@ -6,8 +13,7 @@
   }
 
   .loginBox {
-    width: 50vw;
-    margin: 20vh auto 20vh auto;
+    width: 70%;
     text-align: center;
     padding: 30px 0;
     

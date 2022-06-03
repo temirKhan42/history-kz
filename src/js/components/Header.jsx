@@ -179,7 +179,7 @@ export default function Header() {
   };
 
   return (
-    <div className='body'>
+    <div className='body w-100'>
       <header className="header">
         <div className='box flex jc-sb ai-c'>
           <div className='logoBox'>

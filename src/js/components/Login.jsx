@@ -47,12 +47,12 @@ function LoginForm() {
   });
 
   return (
-    <div className='loginBox px-7'>
-      <h2 className='h1 mb-5'>Войти</h2>
+    <div className='loginBox px-7 ms-auto'>
+      <h2 className='h1 mb-4'>Войти</h2>
       <form onSubmit={formik.handleSubmit}>
-        <div class="mb-3 row">
+        <div className="mb-3 row">
           <label className='col-sm-2 col-form-label' htmlFor="email">Email</label>
-          <div class="col-sm-10">
+          <div className="col-sm-10">
             <input
               id="email"
               name="email"
@@ -67,9 +67,9 @@ function LoginForm() {
           </div>
         </div>
 
-        <div class="mb-3 row">
+        <div className="mb-3 row">
           <label className='col-sm-2 col-form-label' htmlFor="password">Password</label>
-          <div class="col-sm-10">
+          <div className="col-sm-10">
             <input
               id="password"
               name="password"
@@ -90,8 +90,9 @@ function LoginForm() {
         {isRequestSuccess ? null : (
           <div className='errMessage'>Неизвестная ошибка, проверьте интернет соединение.</div>
         )}
-
-        <button type="button" className="btn btn-primary mb-3" type="submit" disabled={formik.isSubmitting}>Войти</button>
+        <div className="d-grid gap-1 col-4 mx-auto">
+          <button type="button" className="btn btn-primary mb-3" type="submit" disabled={formik.isSubmitting}>Войти</button>
+        </div>
       </form>
 
       <Link className='btn btn-link' to="/app/signin">Регистрация</Link>
@@ -107,10 +108,10 @@ export default function Home() {
 
   return (
     <>
-      <main className='loginMain row'>
-        <img className='hero' src="../../../images/sduBack.jpg" alt="hero" />
-        <div className='col'>
-          <h1 className='text-uppercase h1'>Книга для подготовки к ент</h1>
+      <main className='loginMain row d-flex mx-auto my-5 vw-60'>
+        <img className='hero' src={require('../../../images/sduBack.jpg')} alt='hero' />
+        <div className='heroTitle col align-bottom align-self-end'>
+          <h1 className='text-uppercase h2 mb-5 p-3'>Книга для подготовки к ент</h1>
         </div>
         <div className='col px-5'>
           {LoginForm()}
