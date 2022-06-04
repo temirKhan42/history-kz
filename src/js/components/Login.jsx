@@ -12,7 +12,7 @@ import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
 import Footer from './Footer.jsx';
 
-import img from '../../../images/sduBack.jpg';
+import img from '../../../images/sdu-back.js';
 
 const getData = async (option) => {
   const { data } = await axios.post(routes.login(), option);
@@ -49,8 +49,8 @@ function LoginForm() {
   });
 
   return (
-    <div className='loginBox px-7 ms-auto'>
-      <h2 className='h1 mb-4'>Войти</h2>
+    <>
+      <h2 className='h3 mb-4 text-white'>Войти</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-3 row">
           <label className='col-sm-2 col-form-label' htmlFor="email">Email</label>
@@ -98,7 +98,7 @@ function LoginForm() {
       </form>
 
       <Link className='btn btn-link' to="/app/signin">Регистрация</Link>
-    </div>
+    </>
   );
 }
 
@@ -110,13 +110,18 @@ export default function Home() {
 
   return (
     <>
-      <main className='loginMain row d-flex mx-auto my-5 vw-60'>
-        <img className='hero' src={img} alt='hero' />
-        <div className='heroTitle col align-bottom align-self-end'>
-          <h1 className='text-uppercase h2 mb-5 p-3'>Книга для подготовки к ент</h1>
-        </div>
-        <div className='col px-5'>
-          {LoginForm()}
+      <main className='loginMain'>
+        <div className='box container mx-auto row vw-60'>  
+          <img className='hero img-fluid' src={img} alt='hero' />
+          <div className='container row d-flex align-items-end h-80 w-90'>
+            <div className='heroTitle col align-bottom'>
+              <h1 className='text-uppercase h2 mb-5 p-3'>Книга для подготовки к ент</h1>
+            </div>
+            
+            <div className='col px-5 loginBox px-7 ms-auto'>
+              {LoginForm()}
+            </div>
+          </div>
         </div>
       </main>
       <Footer />

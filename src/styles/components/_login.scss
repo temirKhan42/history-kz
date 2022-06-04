@@ -1,51 +1,60 @@
 .loginMain {
-  
-  .heroTitle {
-    h1 {
-      color: white;
-      background-color: hsl(0, 90, 65);
-    }
-  }
 
-  .hero {
-    width: 100px;
-    height: 100px;
-  }
+  .box {
+    position: relative;
+    height: 500px;
 
-  .loginBox {
-    width: 70%;
-    text-align: center;
-    padding: 30px 0;
-    
-
-    .title {
-      margin-bottom: 15px;
+    .heroTitle {
+      h1 {
+        color: white;
+        background-color: rgb(178, 22, 22);
+      }
     }
 
-    input {
-      display: block;
-      margin: 0 auto;
-      margin-bottom: 15px;
-      background-color: antiquewhite;
-      font-size: 18px;
+    .hero {
+      z-index: -10;
+      position: absolute;
+      height: 100%;
+      object-fit: cover;
+      overflow-y: hidden;
     }
 
-    .errMessage {
-      display: inline-block;
-      color: white;
-      background-color: red;
-      width: auto;
-      padding: 3px 20px;
-      margin: 0 auto;
-      margin-bottom: 15px;
-    }
+    .loginBox {
+      width: 70%;
+      text-align: center;
+      padding: 30px 0;
+      background-color: hsla(0, 90, 65, 0.7%);
+      
 
-    .loginBtn {
-      margin-bottom: 15px;
-    }
+      .title {
+        margin-bottom: 15px;
+      }
 
-    .link {
-      color: black;
+      input {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 15px;
+        background-color: antiquewhite;
+        font-size: 18px;
+      }
+
+      .errMessage {
+        display: inline-block;
+        color: white;
+        background-color: red;
+        width: auto;
+        padding: 3px 20px;
+        margin: 0 auto;
+        margin-bottom: 15px;
+      }
+
+      .loginBtn {
+        margin-bottom: 15px;
+      }
+
+      .link {
+        color: black;
+      }
     }
   }
 }
