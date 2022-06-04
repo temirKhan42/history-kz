@@ -53,6 +53,7 @@ module.exports = {
             loader: 'file-loader',
           },
         ],
+        type: 'javascript/auto',
       },
     ],
   },
