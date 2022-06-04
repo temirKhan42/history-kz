@@ -12,6 +12,8 @@ import useAuth from '../hooks/index.js';
 import routes from '../routes/index.js';
 import Footer from './Footer.jsx';
 
+import img from '../../../images/sduBack.jpg';
+
 const getData = async (option) => {
   const { data } = await axios.post(routes.login(), option);
   return data;
@@ -109,7 +111,7 @@ export default function Home() {
   return (
     <>
       <main className='loginMain row d-flex mx-auto my-5 vw-60'>
-        <img className='hero' src={require('../../../images/sduBack.jpg')} alt='hero' />
+        <img className='hero' src={img} alt='hero' />
         <div className='heroTitle col align-bottom align-self-end'>
           <h1 className='text-uppercase h2 mb-5 p-3'>Книга для подготовки к ент</h1>
         </div>
