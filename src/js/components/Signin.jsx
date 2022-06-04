@@ -66,69 +66,85 @@ function SettingForm() {
   });
 
   return (
-    <div className='loginBox'>
-      <h2 className='title'>Регистрация</h2>
+    <div className='boxCo container d-flex align-items-end'> 
+    <div className='loginBox w-20 px-5 px-7 mx-auto'>
+      <h2 className='h3 mb-4 text-white'>Регистрация</h2>
       <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          required
-          placeholder='Username'
-          onChange={formik.handleChange}
-          value={formik.values.username}
-        />
-        {formik.errors.username && formik.touched.username ? (
-          <div className='errMessage'>{formik.errors.username}</div>
-        ) : null}
+        <div className="mb-3 row">
+          <label className='col-sm-2 col-form-label text-white' htmlFor="username">Username</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            required
+            placeholder='Username'
+            onChange={formik.handleChange}
+            value={formik.values.username}
+            className="form-control form-control-sm"
+          />
+          {formik.errors.username && formik.touched.username ? (
+            <div className='errMessage'>{formik.errors.username}</div>
+          ) : null}
+        </div>
 
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder='Email'
-          onChange={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.errors.email && formik.touched.email ? (
-          <div className='errMessage'>{formik.errors.email}</div>
-        ) : null}
+        <div className="mb-3 row">
+          <label className='col-sm-2 col-form-label text-white' htmlFor="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder='Email'
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            className="form-control form-control-sm"
+          />
+          {formik.errors.email && formik.touched.email ? (
+            <div className='errMessage'>{formik.errors.email}</div>
+          ) : null}
+        </div>
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          placeholder='Password'
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-        {formik.errors.password && formik.touched.password ? (
-          <div className='errMessage'>{formik.errors.password}</div>
-        ) : null}
+        <div className="mb-3 row">
+          <label className='col-sm-2 col-form-label text-white' htmlFor="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            placeholder='Password'
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            className="form-control form-control-sm"
+          />
+          {formik.errors.password && formik.touched.password ? (
+            <div className='errMessage'>{formik.errors.password}</div>
+          ) : null}
+        </div>
 
-        <label htmlFor="passwordConfirm">Confirm password</label>
-        <input
-          id="passwordConfirm"
-          name="passwordConfirm"
-          type="password"
-          required
-          placeholder='Confirm password'
-          onChange={formik.handleChange}
-          value={formik.values.passwordConfirm}
-        />
-        {formik.errors.passwordConfirm && formik.touched.passwordConfirm ? (
-          <div className='errMessage'>{formik.errors.passwordConfirm}</div>
-        ) : null}
-
-        <button className='loginBtn' type="submit">Зарегистрироваться</button>
+        <div className="mb-3 row">
+          <label className='col-sm-2 col-form-label text-white' htmlFor="passwordConfirm">Confirm password</label>
+          <input
+            id="passwordConfirm"
+            name="passwordConfirm"
+            type="password"
+            required
+            placeholder='Confirm password'
+            onChange={formik.handleChange}
+            value={formik.values.passwordConfirm}
+            className="form-control form-control-sm"
+          />
+          {formik.errors.passwordConfirm && formik.touched.passwordConfirm ? (
+            <div className='errMessage'>{formik.errors.passwordConfirm}</div>
+          ) : null}
+        </div>
+        
+        <div className="mx-auto">
+          <button className="btn btn-primary mb-3" type="submit">Зарегистрироваться</button>
+        </div>
       </form>
 
-      <Link className='link' to="/app/login">Уже зарегистрирован</Link>
+      <Link className='btn btn-link link-light' to="/app/login">Уже зарегистрирован</Link>
+    </div>
     </div>
   );
 }
@@ -142,10 +158,12 @@ export default function Settings() {
 
   return (
     <>
-      <main>
-        {SettingForm()}
+      <main className='loginMain' >
+        <div className='box mt-5 container mx-auto row vw-60'> 
+          {SettingForm()}
+        </div>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

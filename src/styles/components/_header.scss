@@ -1,12 +1,12 @@
 .header {
   width: 100vw;
-  height: 80px;
+  height: 100px;
   margin: 0 auto;
-  padding: 15px;
-  background-color: hsl(100, 0, 95);
+  padding: 25px;
+  background-color: hsl(0, 90, 65);
 
   .box {
-    width: 90%;
+    width: 80%;
     margin: 0 auto;
 
     .logo {
@@ -50,4 +50,9 @@
       }
     }
   }
+}
+
+.navBox {
+  width: 80%;
+  margin: 0 auto;
 }
