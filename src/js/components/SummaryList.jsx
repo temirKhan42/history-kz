@@ -51,3 +51,38 @@ export default function SummaryList({ summaryFor }) {
   )
 };
 
+const List = () => {
+  const dispatch = useDispatch();
+  const { chapters, currentChapterId, bookParts } = useSelector((state) => state.book);
+  const [{ partId }] = chapters.filter(({ id }) => id === currentChapterId);
+
+  
+
+  const [currentPart, setCurrentPart] = useState(partId);
+
+  const handleShowPart = (id) => (e) => {
+    e.preventDefault();
+    setCurrentPart(id);
+  };
+
+  return (
+    <>
+      { bookParts.map(({ partName, id }) => (
+        <li key={`${id}${partName}`}>
+          {/* <a className='dropdown-item' href="#" onClick={handleShowPart(id)}>{partName}</a> */}
+          <div className="btn-group dropend">
+            <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              {partName}
+            </button>
+            <ul className="dropdown-menu">
+              
+            </ul>
+          </div>
+        </li>
+      )) }
+    </>
+  )
+};
+
+export { List };
+
