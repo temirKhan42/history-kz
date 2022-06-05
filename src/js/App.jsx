@@ -9,7 +9,7 @@ import AuthProvider from './components/AuthProvider';
 import Header from './components/Header.jsx';
 import RequireAuth from './components/RequireAuth';
 import Signin from './components/Signin.jsx';
-import Login from './components/Login.jsx';
+import Main from './components/Main.jsx';
 import Home from './components/Home.jsx';
 import Settings from './components/Settings.jsx';
 import Test from './components/Test.jsx';
@@ -37,7 +37,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="app" element={<Header />}>
-            <Route path="login" element={<Login />} />
+            <Route path="main" element={<Main />} />
             <Route path="signin" element={<Signin />} />
             <Route path={home} element={getElement(home)} />
             <Route path={settings} element={getElement(settings)} />

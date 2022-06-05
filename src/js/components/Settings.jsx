@@ -39,36 +39,42 @@ const NameChange = () => {
   });
 
   return (
-    <div className="block">
-      <h3>Изменить имя пользователя</h3>
-      <form className='flex' onSubmit={formik.handleSubmit}>
-        <label htmlFor="username">{auth.user.username}</label>
-        <input
-          id="username"
-          name="username"
-          type="text"
-          required
-          placeholder={auth.user.username}
-          onChange={formik.handleChange}
-          value={formik.values.username}
-          disabled={formik.isSubmitting}
-        />
-        {formik.errors.username && formik.touched.username ? (
-          <div className='errMessage'>{formik.errors.username}</div>
-        ) : null}
-        {isRequestSuccess === null ? null : 
-          isRequestSuccess ? (
-            <div className='errMessage'>
-              Имя пользователя успешно изменено
-            </div>
-          ) : (
-            <div className='errMessage'>
-              Произошла неизвестная ошибка при изменении имени пользователя
-            </div>
-          )
-        }
-
-        <button type="submit" disabled={formik.isSubmitting}>Применить</button>
+    <div>
+      <h4 className="h4 text-light">Изменить имя пользователя</h4>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="row g-2 align-items-center justify-content-center">
+          <div className="col-5 form-floating mb-3">
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              placeholder={auth.user.username}
+              onChange={formik.handleChange}
+              value={formik.values.username}
+              disabled={formik.isSubmitting}
+              className="form-control flex-fill"
+            />
+            <label htmlFor="username">{auth.user.username}</label>
+            {formik.errors.username && formik.touched.username ? (
+              <div className='errMessage'>{formik.errors.username}</div>
+            ) : null}
+            {isRequestSuccess === null ? null : 
+              isRequestSuccess ? (
+                <div className='errMessage'>
+                  Имя пользователя успешно изменено
+                </div>
+              ) : (
+                <div className='errMessage'>
+                  Произошла неизвестная ошибка при изменении имени пользователя
+                </div>
+              )
+            }
+          </div>
+          <div className="col-auto ms-3">
+            <button type="submit" className="btn btn-danger" disabled={formik.isSubmitting}>Применить</button>
+          </div>
+        </div>
       </form>
     </div>
   );
@@ -113,37 +119,44 @@ const EmailChange = () => {
   });
 
   return (
-    <div className="block">
-      <h3>Изменить email</h3>
-      <form className='flex' onSubmit={formik.handleSubmit}>
-        <label htmlFor="newEmail">{oldEmail}</label>
-        <input
-          id="newEmail"
-          name="newEmail"
-          type="email"
-          required
-          placeholder={oldEmail}
-          onChange={formik.handleChange}
-          value={formik.values.newEmail}
-          disabled={formik.isSubmitting}
-        />
-        {formik.errors.newEmail && formik.touched.newEmail ? (
-          <div className='errMessage'>{formik.errors.newEmail}</div>
-        ) : null}
-        {isNewEmailConflict ? (
-          <div className='errMessage'>
-            Ошибка изменения Email, данный Email уже существует.
+    <div>
+      <h4 className="h4 text-light">Изменить email</h4>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="row g-2 align-items-center justify-content-center">
+          <div className="col-5 form-floating mb-3">
+            <input
+              id="newEmail"
+              name="newEmail"
+              type="email"
+              required
+              placeholder={oldEmail}
+              onChange={formik.handleChange}
+              value={formik.values.newEmail}
+              disabled={formik.isSubmitting}
+              className="form-control flex-fill"
+            />
+            <label htmlFor="newEmail">{oldEmail}</label>
+            {formik.errors.newEmail && formik.touched.newEmail ? (
+              <div className='errMessage'>{formik.errors.newEmail}</div>
+            ) : null}
+            {isNewEmailConflict ? (
+              <div className='errMessage'>
+                Ошибка изменения Email, данный Email уже существует.
+              </div>
+            ) : null}
+            {isRequestSuccess === null ? null : 
+              isRequestSuccess ? (
+                <div className='errMessage'>Email успешно изменен</div>
+              ) : (
+                <div className='errMessage'>Произошла неизвестная ошибка при изменении Email</div>
+              )
+            }
           </div>
-        ) : null}
-        {isRequestSuccess === null ? null : 
-          isRequestSuccess ? (
-            <div className='errMessage'>Email успешно изменен</div>
-          ) : (
-            <div className='errMessage'>Произошла неизвестная ошибка при изменении Email</div>
-          )
-        }
 
-        <button type="submit" disabled={formik.isSubmitting}>Применить</button>
+          <div className="col-auto ms-3">
+            <button type="submit" className="btn btn-danger" disabled={formik.isSubmitting}>Применить</button>
+          </div>
+        </div>
       </form>
     </div>
   );
@@ -193,65 +206,78 @@ const PasswordChange = () => {
     },
   });
 
-  return (
-    <div className="block">
-      <h3>Изменить пароль</h3>
-      <form className='flex' onSubmit={formik.handleSubmit}>
-        <div className='passwordChange'>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            placeholder='Password'
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            disabled={formik.isSubmitting}
-          />
-          {!isPasswordValid ? (
-            <div className='errMessage'>Wrong password, try again</div>
-          ) : null}
+  return ( 
+    <div>
+      <h4 className="h4 text-light">Изменить пароль</h4>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="row g-2 align-items-center justify-content-center">
+          <div className='col-5'>
+            <div class="form-floating mb-3">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                placeholder='Password'
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                disabled={formik.isSubmitting}
+                className="form-control flex-fill"
+              />
+              <label htmlFor="password">Password</label>
+              {!isPasswordValid ? (
+                <div className='errMessage'>Wrong password, try again</div>
+              ) : null}
+            </div>
 
-          <label htmlFor="newPassword">New password</label>
-          <input
-            id="newPassword"
-            name="newPassword"
-            type="password"
-            required
-            placeholder='New password'
-            onChange={formik.handleChange}
-            value={formik.values.newPassword}
-            disabled={formik.isSubmitting}
-          />
-          {formik.errors.newPassword && formik.touched.newPassword ? (
-            <div className='errMessage'>{formik.errors.newPassword}</div>
-          ) : null}
+            <div class="form-floating mb-3">
+              <input
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                required
+                placeholder='New password'
+                onChange={formik.handleChange}
+                value={formik.values.newPassword}
+                disabled={formik.isSubmitting}
+                className="form-control flex-fill"
+              />
+              <label htmlFor="newPassword">New password</label>
+              {formik.errors.newPassword && formik.touched.newPassword ? (
+                <div className='errMessage'>{formik.errors.newPassword}</div>
+              ) : null}
+            </div>
 
-          <label htmlFor="confirmPassword">Confirm password</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            required
-            placeholder='Confirm password'
-            onChange={formik.handleChange}
-            value={formik.values.confirmPassword}
-            disabled={formik.isSubmitting}
-          />
-          {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
-            <div className='errMessage'>{formik.errors.confirmPassword}</div>
-          ) : null}
-          {isRequestSuccess === null ? null : 
-            isRequestSuccess ? (
-              <div className='errMessage'>Пароль успешно изменен</div>
-            ) : (
-              <div className='errMessage'>Произошла неизвестная ошибка при изменении пароля</div>
-            )
-          }
+            <div class="form-floating mb-3">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                required
+                placeholder='Confirm password'
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
+                disabled={formik.isSubmitting}
+                className="form-control flex-fill"
+              />
+              <label htmlFor="confirmPassword">Confirm password</label>
+              {formik.errors.confirmPassword && formik.touched.confirmPassword ? (
+                <div className='errMessage'>{formik.errors.confirmPassword}</div>
+              ) : null}
+              {isRequestSuccess === null ? null : 
+                isRequestSuccess ? (
+                  <div className='errMessage'>Пароль успешно изменен</div>
+                ) : (
+                  <div className='errMessage'>Произошла неизвестная ошибка при изменении пароля</div>
+                )
+              }
+            </div>
+          </div>
+          
+          <div className="col-auto ms-3 align-self-end mb-3">
+            <button className='btn btn-danger' type="submit" disabled={formik.isSubmitting}>Применить</button>
+          </div>
         </div>
-
-        <button className='loginBtn' type="submit" disabled={formik.isSubmitting}>Применить</button>
       </form>
     </div>
   );
@@ -264,8 +290,8 @@ export default function Settings() {
   }, []);
 
   return (
-    <main className='settingBox'>
-      <h2 className='title'>Настройки</h2>
+    <main className='settingBox py-4 bg-dark mt-4'>
+      <h2 className="h2 text-light">Настройки</h2>
       <NameChange />
       <EmailChange />
       <PasswordChange />

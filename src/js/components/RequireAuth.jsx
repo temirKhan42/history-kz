@@ -9,7 +9,7 @@ export default function RequireAuth({ children }) {
   console.log(auth);
   return auth.isAuthenticated()
     ? children
-    : <Navigate to="/app/login" state={{ from: location }} replace />;
+    : <Navigate to="/app/main" state={{ from: location }} replace />;
 }
 
 RequireAuth.propTypes = React.Node;

@@ -143,7 +143,7 @@ function SettingForm() {
         </div>
       </form>
 
-      <Link className='btn btn-link link-light' to="/app/login">Уже зарегистрирован</Link>
+      <Link className='btn btn-link link-light' to="/app/main">Уже зарегистрирован</Link>
     </div>
     </div>
   );

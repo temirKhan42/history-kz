@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/userSlice.js';
 import { refreshState } from '../slices/bookSlice.js';
 
+import { useFormik } from 'formik';
+import axios from 'axios';
+import routes from '../routes/index.js';
+
 const Logo = () => {
   return (
     <div className="logo">
@@ -152,6 +156,90 @@ const Logo = () => {
   );
 };
 
+const getData = async (option) => {
+  const { data } = await axios.post(routes.login(), option);
+  return data;
+};
+
+const DropdownLogin = () => {
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const [isRequestSuccess, setIsRequestSuccess] = useState(true);
+  const [isUnauthorizedErr, setIsUnauthorizedErr] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const data = await getData(values);
+        localStorage.setItem('userId', JSON.stringify(data));
+        auth.signin(() => {
+          navigate('/app/home');
+        });
+      } catch (err) {
+        resetForm({ values: '' });
+        if (err.response.status === 401) {
+          setIsUnauthorizedErr(true);
+        } else {
+          setIsRequestSuccess(false);
+        }
+      }
+    },
+  });
+
+  return (
+    <div className="dropdown">
+      <button type="button" className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+        Войти
+      </button>
+      <form className="dropdown-menu p-4" onSubmit={formik.handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="exampleDropdownFormEmail2" className="form-label">Email address</label>
+          <input 
+            type="email"
+            name="email"
+            required
+            className="form-control" 
+            id="exampleDropdownFormEmail2" 
+            placeholder="email@example.com" 
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            disabled={formik.isSubmitting}
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="exampleDropdownFormPassword2" className="form-label">Password</label>
+          <input 
+            type="password" 
+            name="password"
+            required
+            className="form-control" 
+            id="exampleDropdownFormPassword2" 
+            placeholder="Password" 
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            disabled={formik.isSubmitting}
+          />
+        </div>
+
+        {isUnauthorizedErr ? (
+          <div className='errMessage'>Не верный логин или пороль</div>
+        ) : null}
+        {isRequestSuccess ? null : (
+          <div className='errMessage'>Неизвестная ошибка, проверьте интернет соединение.</div>
+        )}
+
+        <button type="submit" className="btn btn-primary" disabled={formik.isSubmitting}>Войти</button>
+        <div className="dropdown-divider"></div>
+        <Link className="dropdown-item" to="/app/signin">Регистрация</Link>
+      </form>
+    </div>
+  )
+}
+
 export default function Header() {
   const dispatch = useDispatch();
   const { currentPath, isTesting } = useSelector((state) => state.user);
@@ -174,16 +262,18 @@ export default function Header() {
     setIsMenuOpened(false);
     auth.signout(() => {
       dispatch(refreshState());
-      navigate('/app/login');
+      navigate('/app/main');
     });
   };
+
+  console.log(currentPath);
 
   return (
     <div className='body w-100'>
       <div className='text-bg-light'>
       <div className='navBox p-3'> 
-        <nav class="navbar navbar-expand-lg bg-light">
-          <div class="container-fluid collapse navbar-collapse" id="navbarSupportedContent">
+        <nav className="navbar navbar-expand-lg bg-light">
+          <div className="container-fluid collapse navbar-collapse" id="navbarSupportedContent">
             <div className='logoBox'>
               <Logo />
               {/* // <img src={logo} alt="logo" className='logo' /> */}
@@ -193,22 +283,27 @@ export default function Header() {
             </button>
             {
               auth?.user?.username && !isTesting ?
-              (<div>
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
-                    <Link className="nav-link active" aria-current="page" to="/app/home">Home</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/app/progress">My progress</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/app/settings">Settings</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link " to="#" onClick={handleExitClick}>Exit</Link>
-                  </li>
-                </ul>
-              </div>) : null
+              (
+                <div>
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li className="nav-item">
+                      <Link className="nav-link active" aria-current="page" to="/app/home">Home</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/app/progress">My progress</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/app/settings">Settings</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link " to="#" onClick={handleExitClick}>Exit</Link>
+                    </li>
+                  </ul>
+                </div>
+              ) : null
+            }
+            {
+              !auth?.user?.username && currentPath !== '/app/signin' ? <DropdownLogin /> : null
             }
           </div>
         </nav>  
