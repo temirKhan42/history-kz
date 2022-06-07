@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import SummaryList from './SummaryList.jsx';
 import { 
   fetchData,
   fetchTests,
@@ -66,7 +65,6 @@ export default function Home() {
 
   return (
     <main className='home'>
-      {chapters.length === 0 ? null : <SummaryList summaryFor={HOME_SUMMARY}/>}
       <section className='subject'>
         <h3 className='chapterName'>{currentChapterName}</h3>
         <article>

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/userSlice.js';
-import SummaryList from './SummaryList.jsx';
 import RenderLineChart from './RenderLineChart.jsx';
 import RenderPieChart from './RenderPieChart.jsx';
 import RenderAreaChart from './RenderAreaChart.jsx';
@@ -47,7 +46,6 @@ export default function Progress() {
 
   return (
     <main className="home progress" style={{ padding: '1rem 0' }}>
-      {chapters.length === 0 ? null : <SummaryList summaryFor={PROGRESS_SUMMARY}/>}
       <section className='subject'>
         <RenderAreaChart 
           data={chapterData} 

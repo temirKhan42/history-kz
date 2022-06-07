@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import routes from '../routes/index.js';
 
-import { List } from './SummaryList';
+import List from './SummaryList';
 
 const Logo = () => {
   return (
@@ -278,55 +278,64 @@ export default function Header() {
       <div className='text-bg-light'>
       <div className='navBox p-3'> 
         <nav className="navbar navbar-expand-lg bg-light">
-          <div className="container-fluid collapse navbar-collapse" id="navbarSupportedContent">
+          <div className="d-flex justify-content-between" id="navbarSupportedContent">
             <div className='logoBox'>
               <Logo />
-              {/* // <img src={logo} alt="logo" className='logo' /> */}
             </div>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>
             </button>
             {
-              auth?.user?.username && !isTesting ?
+              currentPath !== '/app/main' && !isTesting ?
               (
                 <>
                   <ul className="navbar-nav">
                     <li className="nav-item dropdown">
-                      <a className="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a className="nav-link dropdown-toggle" href="#offcanvasExample" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="offcanvas" aria-controls="offcanvasExample">
                         Dropdown 
                       </a>
-                      <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                        {chapters.length === 0 ? null : <List />}
-                      </ul>
                     </li>
                   </ul>
-                  <div>
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                      <li className="nav-item">
-                        <Link className="nav-link active" aria-current="page" to="/app/home">Home</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/app/progress">My progress</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link" to="/app/settings">Settings</Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link className="nav-link " to="#" onClick={handleExitClick}>Exit</Link>
-                      </li>
-                    </ul>
-                  </div>
-                </>
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li className="nav-item">
+                      <Link className="nav-link active" aria-current="page" to="/app/home">Home</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/app/progress">My progress</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/app/settings">Settings</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link " to="#" onClick={handleExitClick}>Exit</Link>
+                    </li>
+                  </ul>
+                </> 
               ) : null
             }
             {
-              !auth?.user?.username && currentPath !== '/app/signin' ? <DropdownLogin /> : null
+              currentPath === '/app/main' && currentPath !== '/app/signin' ? <DropdownLogin /> : null
             }
           </div>
         </nav>  
       </div>
       </div>
+
+      <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div className="offcanvas-header">
+          <h5 className="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div className="offcanvas-body">
+          <ul className="list-group list-group-flush">
+            {chapters.length === 0 ? null : <List />}
+          </ul>
+        </div>
+      </div>
       <Outlet />
     </div>
   );
 }
+
+
+
