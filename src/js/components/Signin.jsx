@@ -67,79 +67,81 @@ function SettingForm() {
 
   return (
     <div className='boxCo container d-flex align-items-end'> 
-    <div className='loginBox w-20 px-5 px-7 mx-auto'>
-      <h2 className='h3 mb-4 text-white'>Регистрация</h2>
+    <div className='settingBox py-4 bg-dark mt-4'>
+      <h2 className='h2 text-light'>Регистрация</h2>
       <form onSubmit={formik.handleSubmit}>
-        <div className="mb-3 row">
-          <label className='col-sm-2 col-form-label text-white' htmlFor="username">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            required
-            placeholder='Username'
-            onChange={formik.handleChange}
-            value={formik.values.username}
-            className="form-control form-control-sm"
-          />
-          {formik.errors.username && formik.touched.username ? (
-            <div className='errMessage'>{formik.errors.username}</div>
-          ) : null}
-        </div>
+        <div className="row g-1 align-items-center justify-content-center">
+          <div className="col-5 form-floating mb-3">
+            <input
+              id="username"
+              name="username"
+              type="text"
+              required
+              placeholder='Username'
+              onChange={formik.handleChange}
+              value={formik.values.username}
+              className="form-control flex-fill"
+            />
+            <label htmlFor="username">Username</label>
+            {formik.errors.username && formik.touched.username ? (
+              <div className='errMessage'>{formik.errors.username}</div>
+            ) : null}
+          </div>
 
-        <div className="mb-3 row">
-          <label className='col-sm-2 col-form-label text-white' htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            placeholder='Email'
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            className="form-control form-control-sm"
-          />
-          {formik.errors.email && formik.touched.email ? (
-            <div className='errMessage'>{formik.errors.email}</div>
-          ) : null}
-        </div>
+          <div className="col-5 form-floating mb-3">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder='Email'
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              className="form-control flex-fill"
+            />
+            <label htmlFor="email">Email</label>
+            {formik.errors.email && formik.touched.email ? (
+              <div className='errMessage'>{formik.errors.email}</div>
+            ) : null}
+          </div>
 
-        <div className="mb-3 row">
-          <label className='col-sm-2 col-form-label text-white' htmlFor="password">Password</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            placeholder='Password'
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            className="form-control form-control-sm"
-          />
-          {formik.errors.password && formik.touched.password ? (
-            <div className='errMessage'>{formik.errors.password}</div>
-          ) : null}
-        </div>
+          <div className="col-5 form-floating mb-3">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              placeholder='Password'
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              className="form-control flex-fill"
+            />
+            <label htmlFor="password">Password</label>
+            {formik.errors.password && formik.touched.password ? (
+              <div className='errMessage'>{formik.errors.password}</div>
+            ) : null}
+          </div>
 
-        <div className="mb-3 row">
-          <label className='col-sm-2 col-form-label text-white' htmlFor="passwordConfirm">Confirm password</label>
-          <input
-            id="passwordConfirm"
-            name="passwordConfirm"
-            type="password"
-            required
-            placeholder='Confirm password'
-            onChange={formik.handleChange}
-            value={formik.values.passwordConfirm}
-            className="form-control form-control-sm"
-          />
-          {formik.errors.passwordConfirm && formik.touched.passwordConfirm ? (
-            <div className='errMessage'>{formik.errors.passwordConfirm}</div>
-          ) : null}
-        </div>
-        
-        <div className="mx-auto">
-          <button className="btn btn-primary mb-3" type="submit">Зарегистрироваться</button>
+          <div className="col-5 form-floating mb-3">
+            <input
+              id="passwordConfirm"
+              name="passwordConfirm"
+              type="password"
+              required
+              placeholder='Confirm password'
+              onChange={formik.handleChange}
+              value={formik.values.passwordConfirm}
+              className="form-control flex-fill"
+            />
+            <label htmlFor="passwordConfirm">Confirm password</label>
+            {formik.errors.passwordConfirm && formik.touched.passwordConfirm ? (
+              <div className='errMessage'>{formik.errors.passwordConfirm}</div>
+            ) : null}
+          </div>
+          
+          <div className="col-auto ms-3">
+            <button className="btn btn-primary mb-3" type="submit">Зарегистрироваться</button>
+          </div>
         </div>
       </form>
 

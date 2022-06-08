@@ -17,7 +17,7 @@ import useAuth from '../hooks/index.js';
 
 const getParsingText = (text) => {
   const result = text.split('\n')
-    .map((paragraph, i) => (<p key={i}>{paragraph}</p>));
+    .map((paragraph, i) => (<p className='fs-5' key={i}>{paragraph}</p>));
 
   return result;
 };
@@ -65,12 +65,14 @@ export default function Home() {
 
   return (
     <main className='home'>
-      <section className='subject'>
-        <h3 className='chapterName'>{currentChapterName}</h3>
+      <section className='subject container mx-auto my-5'>
+        <h3 className='h3 my-5'>{currentChapterName}</h3>
         <article>
           {currentText === null ? null : getParsingText(currentText)}
         </article>
-        <Link className="link" to="/app/test" onClick={handleTestClick}>Test</Link>
+        <div className="d-grid gap-2 col-6 mx-auto">
+          <Link className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Test</Link>
+        </div>
       </section>
     </main>
   );

@@ -72,7 +72,7 @@ const NameChange = () => {
             }
           </div>
           <div className="col-auto ms-3">
-            <button type="submit" className="btn btn-danger" disabled={formik.isSubmitting}>Применить</button>
+            <button type="submit" className="btn btn-primary mb-3" disabled={formik.isSubmitting}>Применить</button>
           </div>
         </div>
       </form>
