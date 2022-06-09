@@ -40,7 +40,7 @@ const NameChange = () => {
 
   return (
     <div>
-      <h4 className="h4 text-light">Изменить имя пользователя</h4>
+      <h5 className="h5 text-light">Изменить имя пользователя</h5>
       <form onSubmit={formik.handleSubmit}>
         <div className="row g-2 align-items-center justify-content-center">
           <div className="col-5 form-floating mb-3">
@@ -72,7 +72,7 @@ const NameChange = () => {
             }
           </div>
           <div className="col-auto ms-3">
-            <button type="submit" className="btn btn-primary mb-3" disabled={formik.isSubmitting}>Применить</button>
+            <button type="submit" className="btn btn-danger" disabled={formik.isSubmitting}>Применить</button>
           </div>
         </div>
       </form>
@@ -120,7 +120,7 @@ const EmailChange = () => {
 
   return (
     <div>
-      <h4 className="h4 text-light">Изменить email</h4>
+      <h5 className="h5 text-light">Изменить email</h5>
       <form onSubmit={formik.handleSubmit}>
         <div className="row g-2 align-items-center justify-content-center">
           <div className="col-5 form-floating mb-3">
@@ -208,7 +208,7 @@ const PasswordChange = () => {
 
   return ( 
     <div>
-      <h4 className="h4 text-light">Изменить пароль</h4>
+      <h5 className="h5 text-light">Изменить пароль</h5>
       <form onSubmit={formik.handleSubmit}>
         <div className="row g-2 align-items-center justify-content-center">
           <div className='col-5'>
@@ -291,7 +291,7 @@ export default function Settings() {
 
   return (
     <main className='settingBox py-4 bg-dark mt-4'>
-      <h2 className="h2 text-light">Настройки</h2>
+      <h4 className="h4 text-light">Настройки</h4>
       <NameChange />
       <EmailChange />
       <PasswordChange />

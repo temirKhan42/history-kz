@@ -4,11 +4,12 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 const RenderAreaChart = ({ data, title }) => {
   return (
     <>
-      <h3 className='graphTitle'>{title}</h3>
+      <h3 className='graphTitle h4 text-center'>{title}</h3>
       <AreaChart
         width={600}
         height={300}
         data={data}
+        className='mb-5 mx-auto'
         margin={{
           top: 10,
           right: 30,

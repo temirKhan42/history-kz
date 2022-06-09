@@ -20,8 +20,8 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 const RenderPieChart = ({ data, title }) => {
   return (
     <>
-      <h3 className='graphTitle'>{title}</h3>
-      <PieChart width={400} height={400}>
+      <h3 className='graphTitle h4 text-center'>{title}</h3>
+      <PieChart width={400} height={400} className='mb-5 mx-auto'>
         <Pie
           startAngle={90}
           endAngle={-270}

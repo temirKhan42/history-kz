@@ -274,8 +274,8 @@ export default function Header() {
   console.log(currentPath);
 
   return (
-    <div className='body w-100'>
-      <div className='text-bg-light'>
+    <div className='body w-100' id='header'>
+      <div className='text-bg-light sticky-top'>
       <div className='navBox p-3'> 
         <nav className="navbar navbar-expand-lg bg-light">
           <div className="container-fluid" id="navbarSupportedContent">

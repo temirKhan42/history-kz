@@ -44,30 +44,33 @@ export default function Progress() {
     return [{ value: rightAnsweredQs }, { value: tests.length - rightAnsweredQs }];
   }).reverse();
 
+  console.log(chapterData);
   return (
-    <main className="home progress" style={{ padding: '1rem 0' }}>
-      <section className='subject'>
-        <RenderAreaChart 
-          data={chapterData} 
-          xAxis={'date'}
-          yAxis={'correctAnswers'}
-          title={`График пройденных тестов по главе: ${currentChapterName}`}
-        />
-        <RenderPieChart
-          data={chapterDataPie} 
-          title={`График последнего теста главы ${currentChapterName}`} 
-        />
-        <RenderLineChart
-          data={allTestsResults}
-          date={'date'} 
-          line1={'rightAnsweredQs'} 
-          line2={'everAnsweredQs'}
-          title={'График всех правильных ответов ко всем отвеченным вопросам'}
-        />
-        <RenderPieChart
-          data={allTestsResultsPie} 
-          title={`График всех правильных ответов ко всем вопросам`} 
-        />
+    <main style={{ padding: '1rem 0' }}>
+      <section className='container-80'>
+        <div className='my-5'>
+          <RenderAreaChart
+            data={chapterData} 
+            xAxis={'date'}
+            yAxis={'correctAnswers'}
+            title={`График пройденных тестов по главе: ${currentChapterName}`}
+          />
+          <RenderPieChart
+            data={chapterDataPie} 
+            title={`График последнего теста главы ${currentChapterName}`} 
+          />
+          <RenderLineChart
+            data={allTestsResults}
+            date={'date'} 
+            line1={'rightAnsweredQs'} 
+            line2={'everAnsweredQs'}
+            title={'График всех правильных ответов ко всем отвеченным вопросам'}
+          />
+          <RenderPieChart
+            data={allTestsResultsPie} 
+            title={`График всех правильных ответов ко всем вопросам`} 
+          />
+        </div>
       </section>
     </main>
   );

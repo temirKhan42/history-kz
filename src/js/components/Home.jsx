@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import { Link } from 'react-router-dom';
@@ -17,12 +17,14 @@ import useAuth from '../hooks/index.js';
 
 const getParsingText = (text) => {
   const result = text.split('\n')
-    .map((paragraph, i) => (<p className='fs-5' key={i}>{paragraph}</p>));
+    .map((paragraph, i) => (<p className='fs-6' key={i}>{paragraph}</p>));
 
   return result;
 };
 
 export default function Home() {
+  const [navBtnVal, setNavBtnVal] = useState('Вниз');
+
   const dispatch = useDispatch();
   const auth = useAuth();
   const {
@@ -63,17 +65,32 @@ export default function Home() {
     dispatch(setIsTesting());
   };
 
+  const handleNavBtn = () => {
+    navBtnVal === 'Вниз' ? setNavBtnVal('Вверх') : setNavBtnVal('Вниз');
+  };
+
   return (
-    <main className='home'>
+    <main className='home position-relative'>
       <section className='subject container mx-auto my-5'>
         <h3 className='h3 my-5'>{currentChapterName}</h3>
         <article>
           {currentText === null ? null : getParsingText(currentText)}
         </article>
-        <div className="d-grid gap-2 col-6 mx-auto">
-          <Link className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Test</Link>
+      
+        <div className="d-grid gap-2 col-6 mx-auto" id="test">
+          <Link className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Перейти к тесту</Link>
         </div>
       </section>
+
+
+        <nav className="position-fixed top-50 end-0">
+          {
+            navBtnVal === 'Вниз' ?
+              <a className="btn btn-primary me-5" type="button" onClick={handleNavBtn} href="#header">{navBtnVal}</a> :
+              <a className="btn btn-primary me-5" type="button" onClick={handleNavBtn} href="#test">{navBtnVal}</a>
+          }
+
+        </nav>
     </main>
   );
 }
