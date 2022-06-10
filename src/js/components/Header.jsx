@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentPath } from '../slices/userSlice.js';
-import { refreshState } from '../slices/bookSlice.js';
+import { refreshState, setCurrentChapter, fetchData } from '../slices/bookSlice.js';
 
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -246,8 +246,12 @@ export default function Header() {
   const dispatch = useDispatch();
   const { currentPath, isTesting } = useSelector((state) => state.user);
   const {
-    chapters
+    chapters,
+    currentChapterId,
   } = useSelector((state) => state.book);
+
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchList, setSearchList] = useState([]);
 
   useEffect(() => {
     dispatch(setCurrentPath(window.location.pathname));
@@ -271,7 +275,45 @@ export default function Header() {
     });
   };
 
-  console.log(currentPath);
+  const handleSearchChange = (e) => {
+    const newSearchList = chapters.filter(({ chapterName }) => {
+      return chapterName.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1;
+    });
+    setSearchList(newSearchList.length <= 4 ? newSearchList : newSearchList.slice(0, 3));
+    e.target.value === '' ? setIsSearching(false) : setIsSearching(true);
+  }
+
+
+  const handleShowChapter = (e) => {
+    e.preventDefault();
+    if (searchList.length === 0) {
+      return;
+    }
+
+    const { id, chapterNum } = searchList[0]
+    if (currentPath === '/app/home' && id !== currentChapterId) {
+      dispatch(setCurrentChapter(id));
+      dispatch(fetchData(chapterNum));
+    } else if (currentPath === '/app/progress' && id !== currentChapterId) {
+      dispatch(setCurrentChapter(id));
+      dispatch(fetchData(chapterNum));
+    }
+    setIsSearching(false);
+    setSearchList([]);
+  };
+
+  const handleSearchItemClick = (id, chapterNum) => (e) => {
+    e.preventDefault();
+    if (currentPath === '/app/home' && id !== currentChapterId) {
+      dispatch(setCurrentChapter(id));
+      dispatch(fetchData(chapterNum));
+    } else if (currentPath === '/app/progress' && id !== currentChapterId) {
+      dispatch(setCurrentChapter(id));
+      dispatch(fetchData(chapterNum));
+    }
+    setIsSearching(false);
+    setSearchList([]);
+  };
 
   return (
     <div className='body w-100' id='header'>
@@ -290,13 +332,43 @@ export default function Header() {
               (
                 <>
                 <div className="d-flex">
-                  <ul className="navbar-nav">
-                    <li className="nav-item dropdown">
-                      <a className="nav-link dropdown-toggle" href="#offcanvasExample" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="offcanvas" aria-controls="offcanvasExample">
-                        Содержание
-                      </a>
-                    </li>
-                  </ul>
+                  {
+                    currentPath === '/app/home' || currentPath === '/app/progress' ?
+                    <ul className="navbar-nav">
+                      <li className="nav-item dropdown me-3">
+                        <a className="nav-link dropdown-toggle" href="#offcanvasExample" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="offcanvas" aria-controls="offcanvasExample">
+                          Содержание
+                        </a>
+                      </li>
+                      <li className='me-3'>
+                      <form className="position-relative" role="search">
+                        <div className="d-flex">
+                          <input onChange={handleSearchChange} className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                          <button onClick={handleShowChapter} className="btn btn-outline-success" type="submit">Искать</button>
+                        </div>
+                        {
+                          isSearching && searchList.length > 0 ?
+                          <div className="list-group position-absolute">
+                            {
+                              searchList.map((item, idx) => {
+                                return (
+                                  <a
+                                    href="#"
+                                    className="list-group-item list-group-item-action" 
+                                    key={`${item?.chapterName?.slice(0, 7)}-${idx}`}
+                                    onClick={handleSearchItemClick(item?.id, item?.chapterNum)}
+                                  >
+                                    {item.chapterName}
+                                  </a>
+                                );
+                              })
+                            }
+                          </div> : null
+                        }
+                      </form>
+                      </li>
+                    </ul> : null
+                  }
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
                       <Link className="nav-link active" aria-current="page" to="/app/home">Главная</Link>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentChapter } from '../slices/bookSlice.js';
-import { fetchData } from '../slices/bookSlice.js';
+import { setCurrentChapter, fetchData } from '../slices/bookSlice.js';
 
 
 const List = () => {
