@@ -34,6 +34,7 @@ const initialState = {
   bookParts: [],
   chapters: [],
   isCurrentAnswerChecked: false,
+  isUserAnswerCorrect: null,
   currentChapterId: null,
   currentChapterName: null,
   currentTestState: null,
@@ -44,6 +45,7 @@ const initialState = {
   currentTestIndex: null,
   testsResults: [],
   allTestsResults: [],
+  wasCurrentTestAnswered: false,
 };
 
 export const bookSlice = createSlice({
@@ -74,11 +76,17 @@ export const bookSlice = createSlice({
     setTestsResults: (state, action) => {
       state.testsResults = action.payload;
     },
+    setIsUserAnswerCorrect: (state, action) => {
+      state.isUserAnswerCorrect = action.payload;
+    },
     setAllTestsResults: (state, action) => {
       state.allTestsResults = action.payload;
     },
     setCurrentTestState: (state, action) => {
       state.currentTestState = action.payload;
+    },
+    setWasCurrentTestAnswered: (state, action) => {
+      state.wasCurrentTestAnswered = action.payload;
     },
     addUserAnswer: (state, action) => {
       const userAnswer = action.payload;
@@ -88,14 +96,19 @@ export const bookSlice = createSlice({
           const newAnswerIds = `${testId}` === `${userAnswer.testId}` ? [...answerIds, userAnswer.answerIds[0]] : answerIds;
 
           state.isCurrentAnswerChecked = newAnswerIds.length > 0;
-          return {
+
+          const currentTestAnswer = {
             testId,
             answerIds: newAnswerIds,
-          }
+          };
+
+          state.currentTestState = currentTestAnswer;
+          return currentTestAnswer;
         });
 
         state.userAnswers = answers;
       } else {
+        state.currentTestState = userAnswer;
         state.isCurrentAnswerChecked = userAnswer.answerIds.length > 0;
         state.userAnswers = [...state.userAnswers, userAnswer];
       }
@@ -106,10 +119,14 @@ export const bookSlice = createSlice({
         const newAnswerIds = `${testId}` === `${userAnswer.testId}` ? answerIds.filter((id) => `${id}` !== `${userAnswer.answerIds[0]}`) : answerIds;
         
         state.isCurrentAnswerChecked = newAnswerIds.length > 0;
-        return {
+        
+        const currentTestAnswer = {
           testId,
           answerIds: newAnswerIds,
         };
+
+        state.currentTestState = currentTestAnswer;
+        return currentTestAnswer;
       })
     },
     resetUserAnswers: (state) => {
@@ -153,8 +170,10 @@ export const {
   setChapterTests, 
   setCurrentTestState,
   setCurrentTestIndex,
+  setIsUserAnswerCorrect,
   setTestsResults,
   setAllTestsResults,
+  setWasCurrentTestAnswered,
   addUserAnswer,
   removeUserAnswer,
   resetUserAnswers,

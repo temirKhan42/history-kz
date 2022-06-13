@@ -263,11 +263,12 @@ export default async (app, defaultState = {}) => {
       return;
     }
 
-    const currentQuestion = user.tests.find(({ id }) => id === answer.testId)
-    const correctAnswers = currentQuestion.answers.filter(({ isCorrect }) => isCorrect).map(({ id }) => id);
+    const currentQuestion = user.tests.find(({ id }) => `${id}` === `${answer.testId}`);
+
+    const correctAnswers = currentQuestion.answers.filter(({ isCorrect }) => isCorrect).map(({ id }) => `${id}`);
     console.log(_.sortBy(correctAnswers), _.sortBy(answer.answerIds));
     const isCorrect = _.isEqual(_.sortBy(correctAnswers), _.sortBy(answer.answerIds));
-    reply.send({ testId: answer.testId, isCorrect });
+    reply.send({ isCorrect });
   });
 
   app.post('/api/v1/text', async (req, reply) => {

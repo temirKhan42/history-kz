@@ -6,9 +6,12 @@ import _ from 'lodash';
 import { setCurrentPath, setIsTesting } from '../slices/userSlice.js';
 import {
   setCurrentTestIndex,
+  setCurrentTestState,
   setCurrentAnswerChecked,
   setTestsResults,
   setAllTestsResults,
+  setWasCurrentTestAnswered,
+  setIsUserAnswerCorrect,
   resetUserAnswers,
 } from '../slices/bookSlice.js';
 import CurrentTest from './CurrentTest.jsx';
@@ -22,8 +25,12 @@ const postTests = async (option) => {
 };
 
 const checkAnswer = async (option) => {
-  const { data } = await axios.post(routes.checkAnswer(), option);
-  return data;
+  try {
+    const { data } = await axios.post(routes.checkAnswer(), option);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 export default function Test() {
@@ -36,6 +43,7 @@ export default function Test() {
   const {
     currentChapterId,
     currentTestIndex,
+    currentTestState,
     chapterTests,
     isCurrentAnswerChecked,
     userAnswers,
@@ -45,16 +53,23 @@ export default function Test() {
     dispatch(setCurrentPath(window.location.pathname));
   }, []);
 
-  const handleClick = async (i) => (e) => {
+  const handleClick = (i) => async (e) => {
     if (!isCurrentAnswerChecked) {
       return;
     }
 
     if (counter === 0) {
-      const option = 
-      await checkAnswer(option);
+      const { isCorrect } = await checkAnswer({
+        userId: auth.user.id,
+        answer: currentTestState,
+      });
+
+      dispatch(setIsUserAnswerCorrect(isCorrect));
+      dispatch(setWasCurrentTestAnswered(true));
       setCounter(1);
     } else if (counter === 1) {
+      dispatch(setIsUserAnswerCorrect(null));
+      dispatch(setWasCurrentTestAnswered(false));
       dispatch(setCurrentTestIndex(currentTestIndex + i));
       setCounter(0);
       dispatch(setCurrentAnswerChecked(false));
@@ -71,6 +86,7 @@ export default function Test() {
       });
       console.log(allTestsResults);
       console.log(testsResults);
+      dispatch(setCurrentTestState(null));
       dispatch(setTestsResults(testsResults));
       dispatch(setAllTestsResults(allTestsResults));
       dispatch(resetUserAnswers());
@@ -94,14 +110,15 @@ export default function Test() {
           className="btn btn-primary" 
           onClick={handleClick(1)} 
           type="button" 
-          disabled={currentTestIndex + 1 >= chapterTests.length} 
+          disabled={currentTestIndex + 1 >= chapterTests.length && counter > 0} 
         >
           Следующий
         </button>
 
         {
           userAnswers.length === chapterTests.length &&
-          userAnswers.every(({ answerIds }) => answerIds.length > 0) ? (
+          userAnswers.every(({ answerIds }) => answerIds.length > 0) &&
+          counter > 0 ? (
             <button type="button" className="btn btn-primary" onClick={handleFinishTest} >
               Закончить тест
             </button>

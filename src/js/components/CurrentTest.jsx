@@ -7,9 +7,12 @@ const CurrentTest = () => {
 
   const {
     currentTestIndex,
+    currentTestState,
     chapterTests,
+    isUserAnswerCorrect,
     userAnswers,
     currentChapterName,
+    wasCurrentTestAnswered,
   } = useSelector((state) => state.book);
 
   const handleChange = (e) => {
@@ -38,6 +41,15 @@ const CurrentTest = () => {
 
   const test = chapterTests[currentTestIndex];
 
+  const setClass = (id) => {
+    console.log(currentTestState?.answerIds, id);
+    
+    return isUserAnswerCorrect === null ? 'answer flex ai-c p-2' :
+      !currentTestState.answerIds.includes(`${id}`) ? 'answer flex ai-c p-2' :
+      isUserAnswerCorrect === true ? 'answer flex ai-c bg-success p-2' : 
+      isUserAnswerCorrect === false ? 'answer flex ai-c bg-danger p-2' : 'answer flex ai-c p-2';
+  }
+
   return (
     <div className='currentTest'>
       <h3 className='chapterTitle'>{currentChapterName}</h3>
@@ -47,7 +59,11 @@ const CurrentTest = () => {
         <ul>
           {test?.answers.map(({ answer, id }) => {
             return (
-              <li className='answer flex ai-c' key={`${test?.id}-${id}`}>
+              <li 
+                className={setClass(id)} 
+                style={{'--bs-bg-opacity': '0.5'}} 
+                key={`${test?.id}-${id}`}
+              >
                 <input
                   className='checkbox'
                   type="checkbox"
@@ -56,6 +72,7 @@ const CurrentTest = () => {
                   name={`testId:${test?.id}`}
                   value={`${test?.id}-${id}`}
                   id={`${test?.id}-${id}`}
+                  disabled={wasCurrentTestAnswered}
                 />
                 <label className='text' htmlFor={`${test?.id}-${id}`}>{answer}</label>
               </li>
