@@ -18,6 +18,30 @@ import images from '../../data/images/index.js';
 
 
 const getParsingText = (text) => {
+  if (text.slice(0, 11) === '#chronology') {
+    return (<ol className="list-group list-group-flush">
+      {
+        text.split('\n')
+          .filter((p, i) => i !== 0)
+          .map((paragraph, i) => {
+            return <li className='list-group-item fs-6 p-2' key={i}>{paragraph}</li>
+        })
+      }
+    </ol>); 
+  }
+
+  if (text.slice(0, 8) === '#glosary') {
+    return (<ol className="list-group list-group-flush">
+      {
+        text.split('\n')
+          .filter((p, i) => i !== 0)
+          .map((paragraph, i) => {
+            return <li className='list-group-item fs-6 p-2' key={i}>{paragraph}</li>
+        })
+      }
+    </ol>); 
+  }
+
   const result = text.split('\n')
     .map((paragraph, i) => {
       const image = Object.entries(images).find(([key]) => paragraph === `img-${key}`)
@@ -87,11 +111,11 @@ export default function Home() {
         <article>
           {currentText === null ? null : getParsingText(currentText)}
         </article>
-        <div id="footer"></div>
+        <div id="footer" className='mb-5'></div>
         {
-          currentChapterName === 'Введение' ? null :
+          currentChapterName === 'Введение' || currentChapterName === 'ХРОНОЛОГИЧЕСКАЯ ТАБЛИЦА ВАЖНЕЙШИХ СОБЫТИЙ ПО ПРЕДМЕТУ «ИСТОРИЯ КАЗАХСТАНА»' || currentChapterName === 'Глоссарий' ? null :
           <div className="d-grid gap-2 col-6 mx-auto" id="test">
-            <Link className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Перейти к тесту</Link>
+            <Link id="test" className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Перейти к тесту</Link>
           </div>
         }
       </section>

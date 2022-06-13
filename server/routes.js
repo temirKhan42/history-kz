@@ -104,6 +104,7 @@ const buildState = async () => {
 
   const bookParts = setBookParts(BOOK_PARTS);
   const chapters = setChapters(BOOK_PART_DICT, bookParts);
+  console.log(bookParts, chapters);
   const tests = await buildTest(chapters);
 
   const state = {

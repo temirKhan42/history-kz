@@ -25,7 +25,7 @@ const CurrentTest = () => {
     };
 
     const isAnswerChecked = userAnswers.some(({ testId, answerIds }) => (
-      `${testId}` === `${curTestId}` && answerIds.some((id) => `${id}` === `${curAnswerId}`)
+      `${testId}` === `${curTestId}` && answerIds?.some((id) => `${id}` === `${curAnswerId}`)
     ));
 
     dispatch(isAnswerChecked ? removeUserAnswer(userAnswer) : addUserAnswer(userAnswer));
@@ -41,11 +41,9 @@ const CurrentTest = () => {
 
   const test = chapterTests[currentTestIndex];
 
-  const setClass = (id) => {
-    console.log(currentTestState?.answerIds, id);
-    
+  const setClass = (id) => {    
     return isUserAnswerCorrect === null ? 'answer flex ai-c p-2' :
-      !currentTestState.answerIds.includes(`${id}`) ? 'answer flex ai-c p-2' :
+      !currentTestState?.answerIds?.includes(`${id}`) ? 'answer flex ai-c p-2' :
       isUserAnswerCorrect === true ? 'answer flex ai-c bg-success p-2' : 
       isUserAnswerCorrect === false ? 'answer flex ai-c bg-danger p-2' : 'answer flex ai-c p-2';
   }

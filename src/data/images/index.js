@@ -14,7 +14,16 @@ import map from './map.js';
 import looks from './looks.js';
 import wariors from './wariors.js';
 import wariors2 from './wariors2.js';
-
+import dear from './dear.js';
+import rocks from './rocks.js';
+import goldman from './goldman.js';
+import smmap from './smmap.js';
+import kazmap from './kazmap.js';
+import camels from './camels.js';
+import horseman from './horseman.js';
+import mnglmap from './mnglmap.js';
+import picture from './picture.js';
+import table from './table.js';
 
 const images = {
   stones1,
@@ -29,10 +38,20 @@ const images = {
   dishes,
   nomads,
   yurta,
-  map,
   looks,
   wariors,
   wariors2,
+  dear,
+  rocks,
+  goldman,
+  map,
+  smmap,
+  kazmap,
+  camels,
+  horseman,
+  mnglmap,
+  picture,
+  table,
 };
 
 export default images;

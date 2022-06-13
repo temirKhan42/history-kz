@@ -212,7 +212,7 @@ const PasswordChange = () => {
       <form onSubmit={formik.handleSubmit}>
         <div className="row g-2 align-items-center justify-content-center">
           <div className='col-5'>
-            <div class="form-floating mb-3">
+            <div className="form-floating mb-3">
               <input
                 id="password"
                 name="password"
@@ -230,7 +230,7 @@ const PasswordChange = () => {
               ) : null}
             </div>
 
-            <div class="form-floating mb-3">
+            <div className="form-floating mb-3">
               <input
                 id="newPassword"
                 name="newPassword"
@@ -248,7 +248,7 @@ const PasswordChange = () => {
               ) : null}
             </div>
 
-            <div class="form-floating mb-3">
+            <div className="form-floating mb-3">
               <input
                 id="confirmPassword"
                 name="confirmPassword"
