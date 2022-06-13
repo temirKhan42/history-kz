@@ -14,10 +14,20 @@ import {
   setTestsResults,
 } from '../slices/bookSlice.js';
 import useAuth from '../hooks/index.js';
+import images from '../../data/images/index.js';
+
 
 const getParsingText = (text) => {
   const result = text.split('\n')
-    .map((paragraph, i) => (<p className='fs-6' key={i}>{paragraph}</p>));
+    .map((paragraph, i) => {
+      const image = Object.entries(images).find(([key]) => paragraph === `img-${key}`)
+      if (image) {
+        const [imgName, imgUri] = image;
+        console.log(imgName);
+        return <img key={`${paragraph}${i}`} style={{ width: '300px', height: '300px' }} className='mx-auto' src={imgUri} alt='hero' />
+      }
+      return <p className='fs-6' key={i}>{paragraph}</p>
+  });
 
   return result;
 };
@@ -35,6 +45,7 @@ export default function Home() {
     currentChapterId,
   } = useSelector((state) => state.book);
 
+  console.dir(document.getElementById('root').firstElementChild);
   const HOME_SUMMARY = 'HOME_SUMMARY';
 
   useEffect(() => {
@@ -49,7 +60,7 @@ export default function Home() {
     }
     
     if (currentText === null) {
-      const INITIAL_CHAPTER_NUM = '1';
+      const INITIAL_CHAPTER_NUM = '0';
       dispatch(fetchData(INITIAL_CHAPTER_NUM));
     }
     

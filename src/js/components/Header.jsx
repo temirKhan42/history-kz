@@ -240,7 +240,7 @@ const DropdownLogin = () => {
       </form>
     </div>
   )
-}
+};
 
 export default function Header() {
   const dispatch = useDispatch();

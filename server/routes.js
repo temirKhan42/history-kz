@@ -23,7 +23,7 @@ const setChapters = (bookPartDict, bookParts) => (Object.entries(bookPartDict)
     const [{ id: partId }] = bookParts.filter(({ partNum }) => partNum === parseInt(part));
     
     const partChapters = chapters.map((chapterName, index) => {
-      const chapterNum = acc.length + index + 1;
+      const chapterNum = acc.length + index;
       return {
         id: getNextId(),
         chapterName,
