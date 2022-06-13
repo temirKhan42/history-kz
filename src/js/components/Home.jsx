@@ -87,21 +87,23 @@ export default function Home() {
         <article>
           {currentText === null ? null : getParsingText(currentText)}
         </article>
-      
-        <div className="d-grid gap-2 col-6 mx-auto" id="test">
-          <Link className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Перейти к тесту</Link>
-        </div>
+        <div id="footer"></div>
+        {
+          currentChapterName === 'Введение' ? null :
+          <div className="d-grid gap-2 col-6 mx-auto" id="test">
+            <Link className="btn btn-primary" type="button" to="/app/test" onClick={handleTestClick}>Перейти к тесту</Link>
+          </div>
+        }
       </section>
 
+      <nav className="position-fixed top-50 end-0">
+        {
+          navBtnVal === 'Вниз' ?
+            <a className="btn btn-primary me-5" type="button" onClick={handleNavBtn} href="#header">{navBtnVal}</a> :
+            <a className="btn btn-primary me-5" type="button" onClick={handleNavBtn} href="#footer">{navBtnVal}</a>
+        }
 
-        <nav className="position-fixed top-50 end-0">
-          {
-            navBtnVal === 'Вниз' ?
-              <a className="btn btn-primary me-5" type="button" onClick={handleNavBtn} href="#header">{navBtnVal}</a> :
-              <a className="btn btn-primary me-5" type="button" onClick={handleNavBtn} href="#test">{navBtnVal}</a>
-          }
-
-        </nav>
+      </nav>
     </main>
   );
 }

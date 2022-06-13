@@ -33,8 +33,10 @@ export const fetchTests = createAsyncThunk(
 const initialState = {
   bookParts: [],
   chapters: [],
+  isCurrentAnswerChecked: false,
   currentChapterId: null,
   currentChapterName: null,
+  currentTestState: null,
   currentText: null,
   tests: [],
   chapterTests: [],  
@@ -54,6 +56,9 @@ export const bookSlice = createSlice({
     setBookChapters: (state, action) => {
       state.chapters = action.payload;
     },
+    setCurrentAnswerChecked: (state, action) => {
+      state.isCurrentAnswerChecked = action.payload;
+    },
     setCurrentChapter: (state, action) => {
       const newId = action.payload;
       state.currentChapterId = newId;
@@ -72,28 +77,39 @@ export const bookSlice = createSlice({
     setAllTestsResults: (state, action) => {
       state.allTestsResults = action.payload;
     },
+    setCurrentTestState: (state, action) => {
+      state.currentTestState = action.payload;
+    },
     addUserAnswer: (state, action) => {
       const userAnswer = action.payload;
 
       if (state.userAnswers.some(({ testId }) => `${testId}` === `${userAnswer.testId}`)) {
-        const answers = state.userAnswers.map(({ testId, answerIds }) => ({
-          testId,
-          answerIds: `${testId}` === `${userAnswer.testId}` ? [...answerIds, userAnswer.answerIds[0]] : answerIds,
-        }));
+        const answers = state.userAnswers.map(({ testId, answerIds }) => {
+          const newAnswerIds = `${testId}` === `${userAnswer.testId}` ? [...answerIds, userAnswer.answerIds[0]] : answerIds;
+
+          state.isCurrentAnswerChecked = newAnswerIds.length > 0;
+          return {
+            testId,
+            answerIds: newAnswerIds,
+          }
+        });
 
         state.userAnswers = answers;
       } else {
-        state.userAnswers = [...state.userAnswers, action.payload];
+        state.isCurrentAnswerChecked = userAnswer.answerIds.length > 0;
+        state.userAnswers = [...state.userAnswers, userAnswer];
       }
     },
     removeUserAnswer: (state, action) => {
       const userAnswer = action.payload;
       state.userAnswers = state.userAnswers.map(({ testId, answerIds }) => {
-        const result = {
+        const newAnswerIds = `${testId}` === `${userAnswer.testId}` ? answerIds.filter((id) => `${id}` !== `${userAnswer.answerIds[0]}`) : answerIds;
+        
+        state.isCurrentAnswerChecked = newAnswerIds.length > 0;
+        return {
           testId,
-          answerIds: `${testId}` === `${userAnswer.testId}` ? answerIds.filter((id) => `${id}` !== `${userAnswer.answerIds[0]}`) : answerIds,
+          answerIds: newAnswerIds,
         };
-        return result;
       })
     },
     resetUserAnswers: (state) => {
@@ -132,8 +148,10 @@ export const bookSlice = createSlice({
 export const {
   setBookParts,
   setBookChapters,
+  setCurrentAnswerChecked,
   setCurrentChapter, 
   setChapterTests, 
+  setCurrentTestState,
   setCurrentTestIndex,
   setTestsResults,
   setAllTestsResults,

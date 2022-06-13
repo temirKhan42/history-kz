@@ -252,6 +252,24 @@ export default async (app, defaultState = {}) => {
       .send(modUser);
   });
 
+  app.post('/api/v1/isAnswerCorrect', async (req, reply) => {
+    const userId = _.get(req, 'body.userId');
+    const answer = _.get(req, 'body.answer'); // { testId, answerIds }
+
+    const user = state.users.find(({ id }) => id === userId);
+    
+    if (!user) {
+      reply.send(new Unauthorized());
+      return;
+    }
+
+    const currentQuestion = user.tests.find(({ id }) => id === answer.testId)
+    const correctAnswers = currentQuestion.answers.filter(({ isCorrect }) => isCorrect).map(({ id }) => id);
+    console.log(_.sortBy(correctAnswers), _.sortBy(answer.answerIds));
+    const isCorrect = _.isEqual(_.sortBy(correctAnswers), _.sortBy(answer.answerIds));
+    reply.send({ testId: answer.testId, isCorrect });
+  });
+
   app.post('/api/v1/text', async (req, reply) => {
     const chapterNum = _.get(req, 'body.chapterNum');
     const file = await readfile(chapterNum);
