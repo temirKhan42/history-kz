@@ -84,8 +84,11 @@ export default function Test() {
         userAnswers,
         chapterId: currentChapterId
       });
-      console.log(allTestsResults);
-      console.log(testsResults);
+      dispatch(setIsUserAnswerCorrect(null));
+      dispatch(setWasCurrentTestAnswered(false));
+      setCounter(0);
+      dispatch(setCurrentAnswerChecked(false));
+
       dispatch(setCurrentTestState(null));
       dispatch(setTestsResults(testsResults));
       dispatch(setAllTestsResults(allTestsResults));
